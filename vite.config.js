@@ -11,12 +11,6 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
-        manualChunks: {
-          firebase: [
-            'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js',
-            'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js'
-          ]
-        }
       }
     }
   },
