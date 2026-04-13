@@ -455,44 +455,79 @@
     </div>
 
     <script type="module">
-        import { fetchPendingReviews, approveReview, rejectReview } from './review-handler.js';
         import { db } from './firebase-config.js';
-        import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+        import { collection, getDocs, query, where, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
         let currentFilter = 'pending';
         let allReviews = [];
 
-        // Initial load
-        window.addEventListener('DOMContentLoaded', () => {
-            loadReviews('pending');
-        });
-
-        window.loadReviews = async function(filter) {
-            currentFilter = filter;
-            
-            // Update active button
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-
-            const content = document.getElementById('reviewsContent');
-            content.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading reviews...</p></div>';
-
+        // Fetch pending reviews
+        async function fetchPendingReviews() {
             try {
-                if (filter === 'pending') {
-                    allReviews = await fetchPendingReviews();
-                } else {
-                    allReviews = await fetchAllReviewsByStatus(filter);
+                const temples = await getDocs(collection(db, 'temples'));
+                const pendingReviews = [];
+
+                for (const templeDoc of temples.docs) {
+                    const templeId = templeDoc.id;
+                    const reviewsCollection = collection(db, `temples/${templeId}/reviews`);
+                    const q = query(reviewsCollection, where('status', '==', 'pending'));
+                    const snapshot = await getDocs(q);
+
+                    snapshot.forEach(doc => {
+                        pendingReviews.push({
+                            id: doc.id,
+                            templeId: templeId,
+                            templeName: templeDoc.data().name || 'Unknown Temple',
+                            ...doc.data(),
+                            timestamp: doc.data().timestamp?.toDate?.() || new Date(doc.data().createdAt)
+                        });
+                    });
                 }
 
-                displayReviews(allReviews);
-                updateStats();
+                return pendingReviews.sort((a, b) => {
+                    const dateA = new Date(a.timestamp || a.createdAt);
+                    const dateB = new Date(b.timestamp || b.createdAt);
+                    return dateB - dateA;
+                });
             } catch (error) {
-                content.innerHTML = `<div class="empty-state"><div class="empty-state-icon">⚠️</div><h2>Error loading reviews</h2><p>${error.message}</p></div>`;
+                console.error('❌ Error fetching pending reviews:', error);
+                return [];
             }
-        };
+        }
 
+        // Approve a review
+        async function approveReview(templeId, reviewId) {
+            try {
+                const reviewRef = doc(db, `temples/${templeId}/reviews`, reviewId);
+                await updateDoc(reviewRef, {
+                    status: 'approved',
+                    updatedAt: new Date().toISOString()
+                });
+                console.log('✅ Review approved:', reviewId);
+                return { success: true, message: 'Review approved successfully!' };
+            } catch (error) {
+                console.error('❌ Error approving review:', error);
+                return { success: false, error: error.message };
+            }
+        }
+
+        // Reject a review
+        async function rejectReview(templeId, reviewId) {
+            try {
+                const reviewRef = doc(db, `temples/${templeId}/reviews`, reviewId);
+                await updateDoc(reviewRef, {
+                    status: 'rejected',
+                    updatedAt: new Date().toISOString()
+                });
+                console.log('✅ Review rejected:', reviewId);
+                return { success: true, message: 'Review rejected successfully!' };
+            } catch (error) {
+                console.error('❌ Error rejecting review:', error);
+                return { success: false, error: error.message };
+            }
+        }
+
+        // Fetch reviews by status
         async function fetchAllReviewsByStatus(status) {
             try {
                 const temples = await getDocs(collection(db, 'temples'));
@@ -525,6 +560,44 @@
                 return [];
             }
         }
+
+        // Initial load
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('Admin panel loaded');
+            loadReviews('pending');
+        });
+
+        window.loadReviews = async function(filter) {
+            currentFilter = filter;
+            
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
+
+            const content = document.getElementById('reviewsContent');
+            content.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading reviews...</p></div>';
+
+            try {
+                console.log('Loading reviews with filter:', filter);
+                if (filter === 'pending') {
+                    allReviews = await fetchPendingReviews();
+                    console.log('Pending reviews loaded:', allReviews);
+                } else {
+                    allReviews = await fetchAllReviewsByStatus(filter);
+                    console.log('Reviews with status:', filter, allReviews);
+                }
+
+                displayReviews(allReviews);
+                updateStats();
+            } catch (error) {
+                console.error('Full error:', error);
+                content.innerHTML = `<div class="empty-state"><div class="empty-state-icon">⚠️</div><h2>Error loading reviews</h2><p>${error.message}</p><p style="font-size: 12px; color: #999; margin-top: 10px;">Check browser console (F12) for details</p></div>`;
+            }
+        };
 
         function displayReviews(reviews) {
             const content = document.getElementById('reviewsContent');
