@@ -125,10 +125,11 @@ function createReviewForm(templeId) {
             name="images" 
             accept="image/jpeg,image/png,image/webp" 
             multiple
+            style="display: none;"
           >
-          <div class="upload-area">
+          <div class="upload-area" onclick="document.getElementById('reviewImages').click()" style="cursor: pointer;">
             <p class="upload-icon">📷</p>
-            <p class="upload-text">Click or drag images here</p>
+            <p class="upload-text">📱 Tap to select images</p>
             <small>JPG, PNG, WebP • Max 5MB each</small>
           </div>
           <div id="imagePreview" class="image-preview"></div>
