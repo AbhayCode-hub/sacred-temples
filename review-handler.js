@@ -265,3 +265,76 @@ export async function getRatingDistribution(templeId) {
     return { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
   }
 }
+
+/**
+ * Fetch pending reviews for admin approval
+ */
+export async function fetchPendingReviews() {
+  try {
+    const temples = await getDocs(collection(db, 'temples'));
+    const pendingReviews = [];
+
+    for (const templeDoc of temples.docs) {
+      const templeId = templeDoc.id;
+      const reviewsCollection = collection(db, `temples/${templeId}/reviews`);
+      const q = query(reviewsCollection, where('status', '==', 'pending'));
+      const snapshot = await getDocs(q);
+
+      snapshot.forEach(doc => {
+        pendingReviews.push({
+          id: doc.id,
+          templeId: templeId,
+          templeName: templeDoc.data().name || 'Unknown Temple',
+          ...doc.data(),
+          timestamp: doc.data().timestamp?.toDate?.() || new Date(doc.data().createdAt)
+        });
+      });
+    }
+
+    // Sort by newest first
+    return pendingReviews.sort((a, b) => {
+      const dateA = new Date(a.timestamp || a.createdAt);
+      const dateB = new Date(b.timestamp || b.createdAt);
+      return dateB - dateA;
+    });
+  } catch (error) {
+    console.error('❌ Error fetching pending reviews:', error);
+    return [];
+  }
+}
+
+/**
+ * Approve a review
+ */
+export async function approveReview(templeId, reviewId) {
+  try {
+    const reviewRef = doc(db, `temples/${templeId}/reviews`, reviewId);
+    await updateDoc(reviewRef, {
+      status: 'approved',
+      updatedAt: new Date().toISOString()
+    });
+    console.log('✅ Review approved:', reviewId);
+    return { success: true, message: 'Review approved successfully!' };
+  } catch (error) {
+    console.error('❌ Error approving review:', error);
+    return { success: false, error: error.message };
+  }
+}
+
+/**
+ * Reject/delete a review
+ */
+export async function rejectReview(templeId, reviewId) {
+  try {
+    const reviewRef = doc(db, `temples/${templeId}/reviews`, reviewId);
+    await updateDoc(reviewRef, {
+      status: 'rejected',
+      updatedAt: new Date().toISOString()
+    });
+    console.log('✅ Review rejected:', reviewId);
+    return { success: true, message: 'Review rejected successfully!' };
+  } catch (error) {
+    console.error('❌ Error rejecting review:', error);
+    return { success: false, error: error.message };
+  }
+}
