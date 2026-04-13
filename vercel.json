@@ -8,6 +8,10 @@
   "cleanUrls": true,
   "rewrites": [
     {
+      "source": "/admin-panel",
+      "destination": "/admin-panel.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
