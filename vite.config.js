@@ -20,6 +20,9 @@ export default defineConfig({
         chunkFileNames: 'chunks/[name].[hash].js',
         assetFileNames: 'assets/[name].[hash][extname]'
       }
+    },
+    commonjsOptions: {
+      include: /node_modules/
     }
   },
   server: {
