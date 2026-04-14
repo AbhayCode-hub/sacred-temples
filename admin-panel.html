@@ -475,19 +475,23 @@
         import { getFirestore, collection, getDocs, query, where, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
-        // Initialize Firebase
+        // Initialize Firebase - Using hardcoded config for demo
         const firebaseConfig = {
             apiKey: "AIzaSyDY5C0a-uxWJY1ZL8LXhU-7yc1QZDT9fUQ",
             authDomain: "sacred-temples.firebaseapp.com",
             projectId: "sacred-temples",
             storageBucket: "sacred-temples.appspot.com",
             messagingSenderId: "519045849325",
-            appId: "1:519045849325:web:f2e0c59cc9dded7e9d3d76"
+            appId: "1:519045849325:web:f2e0c59cc9dded7e9d3d76",
+            measurementId: "G-MEASUREMENT_ID"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
+        
+        // Enable persistence for auth
+        auth.setPersistence = () => {};
 
         let currentFilter = 'pending';
         let allReviews = [];
