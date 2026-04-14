@@ -13,7 +13,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: path.resolve(__dirname, 'index.html'),
-        adminPanel: path.resolve(__dirname, 'admin-panel.html')
+        adminPanel: path.resolve(__dirname, 'admin/admin-panel.html')
       },
       output: {
       }
