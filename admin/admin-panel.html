@@ -586,10 +586,11 @@
             // Update active button
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.remove('active');
+                // Check if this button matches the current filter
+                if (btn.textContent.toLowerCase().includes(filter)) {
+                    btn.classList.add('active');
+                }
             });
-            if (event && event.target) {
-                event.target.classList.add('active');
-            }
 
             const content = document.getElementById('reviewsContent');
             content.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading reviews...</p></div>';
@@ -650,7 +651,7 @@
                     ${review.images && review.images.length > 0 ? `
                         <div class="review-images">
                             ${review.images.map(img => `
-                                <img src="${img.url}" alt="Review image" onclick="openImageModal('${img.url}')" style="cursor: pointer;">
+                                <img src="${escapeHtml(img.url)}" alt="Review image" onclick="openImageModal('${img.url}')" style="cursor: pointer;">
                             `).join('')}
                         </div>
                     ` : ''}
