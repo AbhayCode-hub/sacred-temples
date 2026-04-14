@@ -423,16 +423,32 @@
         <div class="content">
             <div class="success-message" id="successMessage"></div>
 
-            <div class="filters">
-                <button class="filter-btn active" onclick="loadReviews('pending')">⏳ Pending Reviews</button>
-                <button class="filter-btn" onclick="loadReviews('approved')">✅ Approved</button>
-                <button class="filter-btn" onclick="loadReviews('rejected')">❌ Rejected</button>
+            <div id="loginForm" style="text-align: center; padding: 40px;">
+                <h2>Admin Login Required</h2>
+                <p style="margin-bottom: 20px; color: #666;">Please sign in to access the review moderation panel.</p>
+                <input type="email" id="adminEmail" placeholder="Email" style="padding: 10px; width: 100%; max-width: 300px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                <input type="password" id="adminPassword" placeholder="Password" style="padding: 10px; width: 100%; max-width: 300px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                <button onclick="handleAdminLogin()" style="padding: 10px 30px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: 600;">Sign In</button>
+                <p id="loginError" style="color: red; margin-top: 10px; display: none;"></p>
             </div>
 
-            <div id="reviewsContent" class="reviews-container">
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p>Loading reviews...</p>
+            <div id="adminContent" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="margin: 0;">Reviews Management</h2>
+                    <button onclick="handleAdminLogout()" style="padding: 8px 16px; background: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer;">Logout</button>
+                </div>
+
+                <div class="filters">
+                    <button class="filter-btn active" onclick="loadReviews('pending')">⏳ Pending Reviews</button>
+                    <button class="filter-btn" onclick="loadReviews('approved')">✅ Approved</button>
+                    <button class="filter-btn" onclick="loadReviews('rejected')">❌ Rejected</button>
+                </div>
+
+                <div id="reviewsContent" class="reviews-container">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading reviews...</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -457,6 +473,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
         import { getFirestore, collection, getDocs, query, where, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
         // Initialize Firebase
         const firebaseConfig = {
@@ -470,6 +487,7 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const auth = getAuth(app);
 
         let currentFilter = 'pending';
         let allReviews = [];
@@ -574,11 +592,45 @@
             }
         }
 
-        // Initial load
-        window.addEventListener('DOMContentLoaded', () => {
-            console.log('Admin panel loaded');
-            loadReviews('pending');
+        // Check auth state on load
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('adminContent').style.display = 'block';
+                loadReviews('pending');
+            } else {
+                document.getElementById('loginForm').style.display = 'block';
+                document.getElementById('adminContent').style.display = 'none';
+            }
         });
+
+        window.handleAdminLogin = async function() {
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            const errorEl = document.getElementById('loginError');
+
+            if (!email || !password) {
+                errorEl.textContent = 'Please enter email and password';
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                errorEl.style.display = 'none';
+            } catch (error) {
+                errorEl.textContent = 'Login failed: ' + error.message;
+                errorEl.style.display = 'block';
+            }
+        };
+
+        window.handleAdminLogout = async function() {
+            try {
+                await signOut(auth);
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        };
 
         window.loadReviews = async function(filter) {
             currentFilter = filter;
