@@ -13,9 +13,12 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: path.resolve(__dirname, 'index.html'),
-        adminPanel: path.resolve(__dirname, 'admin/admin-panel.html')
+        'admin-panel': path.resolve(__dirname, 'admin/admin-panel.html')
       },
       output: {
+        entryFileNames: '[name].js',
+        chunkFileNames: 'chunks/[name].[hash].js',
+        assetFileNames: 'assets/[name].[hash][extname]'
       }
     }
   },
