@@ -626,8 +626,8 @@
                 return;
             }
 
-            content.innerHTML = reviews.map(review => `
-                <div class="review-card">
+            content.innerHTML = reviews.map((review, idx) => `
+                <div class="review-card" data-review-id="${review.id}" data-temple-id="${review.templeId}">
                     <div class="review-header">
                         <div class="review-info">
                             <div class="reviewer-name">${escapeHtml(review.userName)}</div>
@@ -649,21 +649,46 @@
 
                     ${review.images && review.images.length > 0 ? `
                         <div class="review-images">
-                            ${review.images.map(img => `
-                                <img src="${img.url}" alt="Review image" onclick="openImageModal('${img.url}')" style="cursor: pointer;">
+                            ${review.images.map((img, imgIdx) => `
+                                <img src="${escapeHtml(img.url)}" alt="Review image" class="review-image" data-img-index="${imgIdx}" style="cursor: pointer;">
                             `).join('')}
                         </div>
                     ` : ''}
 
                     <div class="review-actions">
-                        <button class="btn btn-view-email" onclick="showEmailModal('${escapeHtml(review.email)}')">📧 View Email</button>
+                        <button class="btn btn-view-email review-email-btn">📧 View Email</button>
                         ${currentFilter === 'pending' ? `
-                            <button class="btn btn-approve" onclick="handleApprove('${review.templeId}', '${review.id}')">✅ Approve</button>
-                            <button class="btn btn-reject" onclick="handleReject('${review.templeId}', '${review.id}')">❌ Reject</button>
+                            <button class="btn btn-approve review-approve-btn">✅ Approve</button>
+                            <button class="btn btn-reject review-reject-btn">❌ Reject</button>
                         ` : ''}
                     </div>
                 </div>
             `).join('');
+
+            // Add event listeners to buttons
+            document.querySelectorAll('.review-card').forEach(card => {
+                const reviewId = card.dataset.reviewId;
+                const templeId = card.dataset.templeId;
+                const email = reviews.find(r => r.id === reviewId)?.email || '';
+
+                card.querySelector('.review-email-btn')?.addEventListener('click', () => {
+                    showEmailModal(email);
+                });
+
+                card.querySelector('.review-approve-btn')?.addEventListener('click', () => {
+                    handleApprove(templeId, reviewId);
+                });
+
+                card.querySelector('.review-reject-btn')?.addEventListener('click', () => {
+                    handleReject(templeId, reviewId);
+                });
+
+                card.querySelectorAll('.review-image').forEach(img => {
+                    img.addEventListener('click', (e) => {
+                        openImageModal(e.target.src);
+                    });
+                });
+            });
         }
 
         window.handleApprove = async function(templeId, reviewId) {

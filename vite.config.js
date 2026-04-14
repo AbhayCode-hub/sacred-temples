@@ -1,4 +1,6 @@
 import { defineConfig } from 'vite'
+import { glob } from 'glob'
+import path from 'path'
 
 export default defineConfig({
   root: './',
@@ -10,6 +12,10 @@ export default defineConfig({
     reportCompressedSize: true,
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+        adminPanel: path.resolve(__dirname, 'admin-panel.html')
+      },
       output: {
       }
     }
