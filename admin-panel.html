@@ -409,7 +409,7 @@
     <div class="container">
         <div class="header">
             <div>
-                <h1>ðŸ›• Review Moderation Center</h1>
+                <h1>🛕 Review Moderation Center</h1>
                 <p style="font-size: 14px; opacity: 0.9; margin-top: 5px;">Manage and approve user reviews</p>
             </div>
             <div class="stats">
@@ -424,9 +424,9 @@
             <div class="success-message" id="successMessage"></div>
 
             <div class="filters">
-                <button class="filter-btn active" onclick="loadReviews('pending')">â³ Pending Reviews</button>
-                <button class="filter-btn" onclick="loadReviews('approved')">âœ… Approved</button>
-                <button class="filter-btn" onclick="loadReviews('rejected')">âŒ Rejected</button>
+                <button class="filter-btn active" onclick="loadReviews('pending')">⏳ Pending Reviews</button>
+                <button class="filter-btn" onclick="loadReviews('approved')">✅ Approved</button>
+                <button class="filter-btn" onclick="loadReviews('rejected')">❌ Rejected</button>
             </div>
 
             <div id="reviewsContent" class="reviews-container">
@@ -503,7 +503,7 @@
                     return dateB - dateA;
                 });
             } catch (error) {
-                console.error('âŒ Error fetching pending reviews:', error);
+                console.error('❌ Error fetching pending reviews:', error);
                 return [];
             }
         }
@@ -516,10 +516,10 @@
                     status: 'approved',
                     updatedAt: new Date().toISOString()
                 });
-                console.log('âœ… Review approved:', reviewId);
+                console.log('✅ Review approved:', reviewId);
                 return { success: true, message: 'Review approved successfully!' };
             } catch (error) {
-                console.error('âŒ Error approving review:', error);
+                console.error('❌ Error approving review:', error);
                 return { success: false, error: error.message };
             }
         }
@@ -532,10 +532,10 @@
                     status: 'rejected',
                     updatedAt: new Date().toISOString()
                 });
-                console.log('âœ… Review rejected:', reviewId);
+                console.log('✅ Review rejected:', reviewId);
                 return { success: true, message: 'Review rejected successfully!' };
             } catch (error) {
-                console.error('âŒ Error rejecting review:', error);
+                console.error('❌ Error rejecting review:', error);
                 return { success: false, error: error.message };
             }
         }
@@ -609,7 +609,7 @@
                 updateStats();
             } catch (error) {
                 console.error('Full error:', error);
-                content.innerHTML = `<div class="empty-state"><div class="empty-state-icon">âš ï¸</div><h2>Error loading reviews</h2><p>${error.message}</p><p style="font-size: 12px; color: #999; margin-top: 10px;">Check browser console (F12) for details</p></div>`;
+                content.innerHTML = `<div class="empty-state"><div class="empty-state-icon">⚠️</div><h2>Error loading reviews</h2><p>${error.message}</p><p style="font-size: 12px; color: #999; margin-top: 10px;">Check browser console (F12) for details</p></div>`;
             }
         };
 
@@ -635,7 +635,7 @@
                             <div class="temple-name">ðŸ›• ${escapeHtml(review.templeName)}</div>
                             <div class="review-meta">
                                 <div>
-                                    <span class="stars">${'â­'.repeat(review.rating)}</span>
+                                    <span class="stars">${'⭐'.repeat(review.rating)}</span>
                                     <span style="color: #666;">${review.rating}/5</span>
                                 </div>
                                 <div>${formatDate(review.timestamp)}</div>
@@ -659,8 +659,8 @@
                     <div class="review-actions">
                         <button class="btn btn-view-email" onclick="showEmailModal('${escapeHtml(review.email)}')">ðŸ“§ View Email</button>
                         ${currentFilter === 'pending' ? `
-                            <button class="btn btn-approve" onclick="handleApprove('${review.templeId}', '${review.id}')">âœ… Approve</button>
-                            <button class="btn btn-reject" onclick="handleReject('${review.templeId}', '${review.id}')">âŒ Reject</button>
+                            <button class="btn btn-approve" onclick="handleApprove('${review.templeId}', '${review.id}')">✅ Approve</button>
+                            <button class="btn btn-reject" onclick="handleReject('${review.templeId}', '${review.id}')">❌ Reject</button>
                         ` : ''}
                     </div>
                 </div>
@@ -671,7 +671,7 @@
             if (confirm('Approve this review?')) {
                 const result = await approveReview(templeId, reviewId);
                 if (result.success) {
-                    showSuccessMessage('âœ… Review approved successfully!');
+                    showSuccessMessage('✅ Review approved successfully!');
                     loadReviews('pending');
                 } else {
                     alert('Error: ' + result.error);
@@ -683,7 +683,7 @@
             if (confirm('Reject this review?')) {
                 const result = await rejectReview(templeId, reviewId);
                 if (result.success) {
-                    showSuccessMessage('âŒ Review rejected successfully!');
+                    showSuccessMessage('❌ Review rejected successfully!');
                     loadReviews('pending');
                 } else {
                     alert('Error: ' + result.error);
