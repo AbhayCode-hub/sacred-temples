@@ -12,8 +12,7 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       input: {
-        main: path.resolve(__dirname, 'index.html'),
-        'admin-panel': path.resolve(__dirname, 'admin-panel.html')
+        main: path.resolve(__dirname, 'index.html')
       },
       output: {
         entryFileNames: '[name].js',
