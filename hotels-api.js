@@ -9,19 +9,15 @@ const CACHE_DURATION = 3600000; // 1 hour in milliseconds
 const HOTEL_SEARCH_RADIUS = 5; // Search radius in km
 
 /**
- * Array of beautiful hotel images from Unsplash
+ * Array of optimized hotel images
+ * Using a consolidated set of professional hotel images to improve performance
+ * and create visual consistency across the app
  */
 const hotelImages = [
   'https://images.unsplash.com/photo-1631049307038-da0ec36d9c58?w=400&h=300&fit=crop', // Luxury hotel
   'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop', // Modern room
   'https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=400&h=300&fit=crop', // Bedroom
-  'https://images.unsplash.com/photo-1611892473755-a03007aaf413?w=400&h=300&fit=crop', // Pool area
-  'https://images.unsplash.com/photo-1559666126-84f89ffc0b65?w=400&h=300&fit=crop', // Elegant room
-  'https://images.unsplash.com/photo-1542314503-37143f3c69f7?w=400&h=300&fit=crop', // Cozy hotel
-  'https://images.unsplash.com/photo-1512453108303-dcf24dc40e13?w=400&h=300&fit=crop', // Hotel lobby
-  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop', // Resort view
-  'https://images.unsplash.com/photo-1518156677180-95a2893f3e9f?w=400&h=300&fit=crop', // Modern suite
-  'https://images.unsplash.com/photo-1571896349842-ec77baa2e206?w=400&h=300&fit=crop'  // Boutique hotel
+  'https://images.unsplash.com/photo-1611892473755-a03007aaf413?w=400&h=300&fit=crop'  // Pool area
 ];
 
 /**

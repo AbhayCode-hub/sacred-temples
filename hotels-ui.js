@@ -133,10 +133,11 @@ function createHotelCard(hotel) {
     .join('');
 
   return `
-    <div class="hotel-card" data-hotel-id="${hotel.id}">
+    <div class="hotel-card clickable-card" data-hotel-id="${hotel.id}">
       <div class="hotel-card-image-container">
         <img src="${hotel.image || 'https://images.unsplash.com/photo-1631049307038-da0ec36d9c58?w=400&h=300&fit=crop'}" alt="${hotel.name}" class="hotel-card-image" onerror="this.src='https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop'">
         <div class="hotel-distance-badge">${hotel.distance} km away</div>
+        <div class="hotel-click-overlay">Click to view details</div>
       </div>
       
       <div class="hotel-card-content">
@@ -167,10 +168,10 @@ function createHotelCard(hotel) {
         </div>
         
         <div class="hotel-actions">
-          <a href="${hotel.mapsUrl}" target="_blank" class="hotel-map-btn">
-            <span class="btn-icon">🗺️</span> View on Map
+          <a href="#" class="hotel-map-btn quick-action">
+            <span class="btn-icon">📍</span> Location
           </a>
-          <a href="${hotel.bookingUrl}" target="_blank" class="hotel-book-btn">
+          <a href="${hotel.bookingUrl}" target="_blank" class="hotel-book-btn quick-action">
             <span class="btn-icon">📅</span> Book Now
           </a>
         </div>
@@ -288,12 +289,128 @@ export function createFilterControls(hotels) {
 }
 
 /**
+ * Show detailed hotel information in a modal
+ * @param {Object} hotel - Hotel object with all details
+ */
+export function showHotelDetails(hotel) {
+  const hotelContainer = document.getElementById('hotelContainer');
+  const hotelFilters = document.getElementById('hotelFilters');
+  
+  if (!hotelContainer) return;
+
+  // Hide filters when viewing hotel details
+  if (hotelFilters) {
+    hotelFilters.style.display = 'none';
+  }
+
+  const mapsUrl = `https://www.google.com/maps/search/${encodeURIComponent(hotel.address)}`;
+  const bookingUrl = hotel.bookingUrl !== '#' ? hotel.bookingUrl : `https://www.google.com/maps/search/hotels+near+${encodeURIComponent(hotel.address)}`;
+
+  hotelContainer.innerHTML = `
+    <button class="hotel-back-btn" id="hotelBackBtn">← Back to Hotels</button>
+    <div class="hotel-detail-content">
+      <div class="hotel-detail-header">
+        <img src="${hotel.image || 'https://images.unsplash.com/photo-1631049307038-da0ec36d9c58?w=600&h=400&fit=crop'}" 
+             alt="${hotel.name}" 
+             class="hotel-detail-image"
+             onerror="this.src='https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop'">
+        <div class="hotel-detail-overlay">
+          <h2 class="hotel-detail-title">${hotel.name}</h2>
+          <div class="hotel-detail-rating">
+            <span class="hotel-stars">${createStarRating(hotel.rating)}</span>
+            <span class="hotel-rating-number">${hotel.rating}</span>
+            <span class="hotel-review-count">(${hotel.ratingCount} reviews)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hotel-detail-section">
+        <h3>📍 Location Information</h3>
+        <div class="location-details">
+          <div class="location-detail-item">
+            <strong>Address</strong>
+            <p>${hotel.address}</p>
+          </div>
+          <div class="location-detail-item">
+            <strong>Distance</strong>
+            <p>${hotel.distance} km away</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="hotel-detail-section">
+        <h3>💰 Price Information</h3>
+        <div class="price-details">
+          <div class="price-large">
+            <span class="price-currency">${hotel.currency}</span>
+            <span class="price-amount">${hotel.price}</span>
+            <span class="price-period">/night</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hotel-detail-section">
+        <h3>🎯 Amenities</h3>
+        <div class="amenities-list">
+          ${hotel.amenities.map(amenity => `<div class="amenity-item">✓ ${amenity}</div>`).join('')}
+        </div>
+      </div>
+
+      <div class="hotel-detail-actions">
+        <a href="${mapsUrl}" target="_blank" class="hotel-action-btn maps-btn">
+          📍 View Location on Map
+        </a>
+        <a href="${bookingUrl}" target="_blank" class="hotel-action-btn booking-btn">
+          📅 Book Hotel
+        </a>
+      </div>
+    </div>
+  `;
+
+  // Add back button listener
+  document.getElementById('hotelBackBtn').addEventListener('click', () => {
+    applyFiltersAndRender();
+    if (hotelFilters) {
+      hotelFilters.style.display = 'block';
+    }
+  });
+
+  // Scroll to hotel detail
+  hotelContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/**
  * Attach event listeners to hotel cards
  */
 function attachHotelCardListeners() {
   const hotelCards = document.querySelectorAll('.hotel-card');
   
   hotelCards.forEach(card => {
+    // Click handler to show hotel details
+    card.addEventListener('click', (e) => {
+      // Don't trigger if clicking on the booking link or location btn
+      if (e.target.closest('.hotel-book-btn')) return;
+      
+      const hotelId = parseInt(card.dataset.hotelId);
+      const hotel = currentHotels.find(h => h.id === hotelId);
+      if (hotel) {
+        showHotelDetails(hotel);
+      }
+    });
+
+    // Handle location button click to show details
+    const locationBtn = card.querySelector('.quick-action:first-child');
+    if (locationBtn) {
+      locationBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const hotelId = parseInt(card.dataset.hotelId);
+        const hotel = currentHotels.find(h => h.id === hotelId);
+        if (hotel) {
+          showHotelDetails(hotel);
+        }
+      });
+    }
+    
     card.addEventListener('mouseenter', function() {
       this.style.transform = 'translateY(-8px)';
     });
