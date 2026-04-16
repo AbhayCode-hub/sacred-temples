@@ -4,7 +4,7 @@ import { templesData, galleryImages, templeGalleries } from './temples-data.js'
 import { loadHotelsForTemple, createFilterControls, attachFilterListeners, resetHotelDisplay } from './hotels-ui.js'
 import { createTransportSection, initTransportSection } from './transport-ui.js'
 import { initializeReviewSection } from './review-ui.js'
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js'
+import { initializeApp as initFirebaseApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js'
 import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js'
 
 // Firebase config
@@ -15,10 +15,10 @@ const firebaseConfig = {
   storageBucket: "sacred-temples.firebasestorage.app",
   messagingSenderId: "756850869278",
   appId: "1:756850869278:web:656eb42906c888ad309a0f",
-  measurementId: "G-YMBPSQ532K"
+  measurementId: "G-YMBQ532K"
 };
 
-const app = initializeApp(firebaseConfig);
+const app = initFirebaseApp(firebaseConfig);
 const db = getFirestore(app);
 
 
