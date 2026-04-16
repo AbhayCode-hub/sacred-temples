@@ -1,803 +1,715 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Review Moderation | Sacred Temples</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sacred Temples — Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
+    :root {
+      --bg:        #0a0a0b;
+      --surface:   #111114;
+      --surface2:  #18181d;
+      --border:    #222228;
+      --border2:   #2e2e38;
+      --gold:      #c9a84c;
+      --gold-dim:  #7a5f28;
+      --gold-glow: rgba(201,168,76,.15);
+      --text:      #e8e6e0;
+      --text-muted:#7a7870;
+      --text-dim:  #4a4840;
+      --green:     #3dbd7d;
+      --green-bg:  rgba(61,189,125,.1);
+      --red:       #e05757;
+      --red-bg:    rgba(224,87,87,.1);
+      --amber:     #e8a030;
+      --amber-bg:  rgba(232,160,48,.1);
+      --blue:      #5b8dee;
+      --radius:    10px;
+      --radius-lg: 16px;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-        }
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
 
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    /* Subtle grain overlay */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: .4;
+    }
 
-        .header h1 {
-            font-size: 28px;
-        }
+    /* ── Layout ── */
+    .layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
 
-        .stats {
-            display: flex;
-            gap: 20px;
-            font-size: 14px;
-        }
+    /* ── Sidebar ── */
+    .sidebar {
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
 
-        .stat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px 15px;
-            border-radius: 5px;
-        }
+    .sidebar-logo {
+      padding: 28px 24px 20px;
+      border-bottom: 1px solid var(--border);
+    }
 
-        .stat-number {
-            font-size: 24px;
-            font-weight: bold;
-        }
+    .logo-mark {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-        .content {
-            padding: 30px;
-        }
+    .logo-mark::before {
+      content: '⛩';
+      font-size: 18px;
+    }
 
-        .filters {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
+    .logo-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
 
-        .filter-btn {
-            padding: 10px 20px;
-            border: 2px solid #667eea;
-            background: white;
-            color: #667eea;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
+    .sidebar-nav {
+      flex: 1;
+      padding: 20px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
 
-        .filter-btn.active {
-            background: #667eea;
-            color: white;
-        }
+    .nav-label {
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      padding: 12px 12px 6px;
+      font-weight: 500;
+    }
 
-        .filter-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-        }
+    .filter-tab {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      border: 1px solid transparent;
+      background: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      transition: all .2s;
+      text-align: left;
+      width: 100%;
+    }
 
-        .reviews-container {
-            display: grid;
-            gap: 20px;
-        }
+    .filter-tab:hover {
+      background: var(--surface2);
+      color: var(--text);
+    }
 
-        .review-card {
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 20px;
-            background: #f9f9f9;
-            transition: all 0.3s ease;
-        }
+    .filter-tab.active {
+      background: var(--gold-glow);
+      border-color: var(--gold-dim);
+      color: var(--gold);
+    }
 
-        .review-card:hover {
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            transform: translateY(-2px);
-        }
+    .tab-label { display: flex; align-items: center; gap: 10px; }
+    .tab-icon { font-size: 15px; opacity: .8; }
 
-        .review-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
+    .tab-count {
+      font-size: 11px;
+      font-weight: 500;
+      background: var(--surface2);
+      color: var(--text-muted);
+      padding: 2px 7px;
+      border-radius: 20px;
+      min-width: 22px;
+      text-align: center;
+    }
 
-        .review-info {
-            flex: 1;
-        }
+    .filter-tab.active .tab-count {
+      background: var(--gold-dim);
+      color: var(--gold);
+    }
 
-        .reviewer-name {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
-        }
+    .sidebar-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-dim);
+    }
 
-        .temple-name {
-            font-size: 14px;
-            color: #667eea;
-            font-weight: 500;
-            margin-bottom: 5px;
-        }
+    .status-dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+      margin-right: 6px;
+      animation: pulse 2s infinite;
+    }
 
-        .review-meta {
-            font-size: 13px;
-            color: #999;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .4; }
+    }
 
-        .stars {
-            color: #ffc107;
-            font-size: 14px;
-        }
+    /* ── Main ── */
+    .main {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
 
-        .review-content {
-            margin: 15px 0;
-            line-height: 1.6;
-            color: #555;
-        }
+    /* ── Topbar ── */
+    .topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
 
-        .review-images {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 10px;
-            margin: 15px 0;
-        }
+    .topbar-left h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: .05em;
+    }
 
-        .review-images img {
-            width: 100%;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
+    .topbar-left p {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
 
-        .review-images img:hover {
-            transform: scale(1.05);
-        }
+    .result-count {
+      font-size: 12px;
+      color: var(--text-muted);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 20px;
+    }
 
-        .review-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
+    /* ── Stats row ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border-bottom: 1px solid var(--border);
+    }
 
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
+    .stat-card {
+      background: var(--surface);
+      padding: 20px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
 
-        .btn-approve {
-            background: #4caf50;
-            color: white;
-        }
+    .stat-label {
+      font-size: 11px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
 
-        .btn-approve:hover {
-            background: #45a049;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
-        }
+    .stat-value {
+      font-family: 'Cinzel', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+    }
 
-        .btn-reject {
-            background: #f44336;
-            color: white;
-        }
+    .stat-card.pending .stat-value { color: var(--amber); }
+    .stat-card.approved .stat-value { color: var(--green); }
+    .stat-card.rejected .stat-value { color: var(--red); }
 
-        .btn-reject:hover {
-            background: #da190b;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.3);
-        }
+    .stat-sub {
+      font-size: 11px;
+      color: var(--text-dim);
+    }
 
-        .btn-view-email {
-            background: #2196f3;
-            color: white;
-        }
+    /* ── Content area ── */
+    .content-area {
+      flex: 1;
+      padding: 28px 32px;
+      max-width: 900px;
+    }
 
-        .btn-view-email:hover {
-            background: #0b7dda;
-        }
+    /* ── Review Cards ── */
+    .review-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px 24px;
+      margin-bottom: 14px;
+      transition: border-color .2s, transform .2s;
+      animation: slideIn .3s both;
+    }
 
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-        }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
-        .empty-state-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
-            opacity: 0.5;
-        }
+    .review-card:hover {
+      border-color: var(--border2);
+      transform: translateY(-1px);
+    }
 
-        .empty-state h2 {
-            color: #999;
-            margin-bottom: 10px;
-        }
+    .review-card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
 
-        .empty-state p {
-            color: #bbb;
-        }
+    .reviewer-avatar {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-dim), var(--surface2));
+      border: 1px solid var(--gold-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
 
-        .email-modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
+    .reviewer-meta { flex: 1; }
 
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 20px;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-        }
+    .reviewer-name {
+      font-weight: 500;
+      color: var(--text);
+      font-size: 15px;
+    }
 
-        .close-modal {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+    .reviewer-temple {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
 
-        .close-modal:hover {
-            color: #000;
-        }
+    .review-right { text-align: right; flex-shrink: 0; }
 
-        .modal-email {
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 15px 0;
-            word-break: break-all;
-            font-family: monospace;
-        }
+    .stars-row { margin-bottom: 4px; }
 
-        .image-modal {
-            display: none;
-            position: fixed;
-            z-index: 1001;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            justify-content: center;
-            align-items: center;
-        }
+    .star { color: var(--text-dim); font-size: 14px; }
+    .star.filled { color: var(--gold); }
 
-        .image-modal.active {
-            display: flex;
-        }
+    .review-time {
+      font-size: 11px;
+      color: var(--text-dim);
+    }
 
-        .modal-image {
-            max-width: 90%;
-            max-height: 90vh;
-            border-radius: 5px;
-        }
+    .review-body { margin-bottom: 16px; }
 
-        .image-close {
-            color: white;
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            font-size: 40px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+    .review-text {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.7;
+      font-style: italic;
+    }
 
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #667eea;
-        }
+    .review-images {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
 
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
+    .review-thumb {
+      width: 70px; height: 70px;
+      object-fit: cover;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: transform .2s, border-color .2s;
+    }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+    .review-thumb:hover {
+      transform: scale(1.05);
+      border-color: var(--gold-dim);
+    }
 
-        .status-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-        }
+    .review-card-footer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
 
-        .status-pending {
-            background: #fff3cd;
-            color: #856404;
-        }
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 16px;
+      border-radius: 6px;
+      border: 1px solid var(--border2);
+      background: var(--surface2);
+      color: var(--text-muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all .18s;
+    }
 
-        .success-message {
-            background: #d4edda;
-            color: #155724;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: none;
-        }
+    .action-btn:hover { color: var(--text); border-color: var(--border2); background: var(--surface); }
 
-        .success-message.show {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
+    .approve-btn { border-color: rgba(61,189,125,.3); color: var(--green); background: var(--green-bg); }
+    .approve-btn:hover { border-color: var(--green); background: rgba(61,189,125,.18); color: var(--green); }
 
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    .reject-btn { border-color: rgba(224,87,87,.3); color: var(--red); background: var(--red-bg); }
+    .reject-btn:hover { border-color: var(--red); background: rgba(224,87,87,.18); color: var(--red); }
 
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                gap: 15px;
-            }
+    .email-btn { margin-right: auto; }
 
-            .stats {
-                width: 100%;
-                justify-content: space-around;
-            }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .05em;
+      text-transform: capitalize;
+      margin-left: auto;
+    }
 
-            .review-header {
-                flex-direction: column;
-                gap: 10px;
-            }
+    .status-approved { background: var(--green-bg); color: var(--green); border: 1px solid rgba(61,189,125,.2); }
+    .status-rejected { background: var(--red-bg); color: var(--red); border: 1px solid rgba(224,87,87,.2); }
 
-            .review-actions {
-                width: 100%;
-            }
+    /* ── Empty & Loading ── */
+    .empty-state, .loading-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 80px 20px;
+      color: var(--text-muted);
+      text-align: center;
+    }
 
-            .btn {
-                flex: 1;
-                text-align: center;
-            }
-        }
-    </style>
+    .empty-icon {
+      font-size: 40px;
+      color: var(--text-dim);
+      line-height: 1;
+      font-family: 'Cinzel', serif;
+    }
+
+    .empty-state h3 { font-size: 16px; color: var(--text); font-weight: 400; }
+    .empty-state p  { font-size: 13px; color: var(--text-dim); }
+
+    .loader {
+      width: 28px; height: 28px;
+      border: 2px solid var(--border2);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Modals ── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.75);
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      min-width: 320px;
+      max-width: 90vw;
+      transform: translateY(10px) scale(.97);
+      transition: transform .2s;
+      box-shadow: 0 20px 60px rgba(0,0,0,.6);
+    }
+
+    .modal-overlay.active .modal-box {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-title {
+      font-family: 'Cinzel', serif;
+      font-size: 14px;
+      letter-spacing: .1em;
+      color: var(--gold);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+
+    .email-display {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      font-size: 14px;
+      color: var(--text);
+      letter-spacing: .02em;
+      word-break: break-all;
+      margin-bottom: 20px;
+    }
+
+    .modal-close {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btn-close {
+      padding: 8px 20px;
+      border-radius: 6px;
+      border: 1px solid var(--border2);
+      background: var(--surface2);
+      color: var(--text-muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .btn-close:hover { color: var(--text); border-color: var(--gold-dim); }
+
+    .image-modal-content { text-align: center; }
+
+    .image-modal-content img {
+      max-width: 80vw;
+      max-height: 75vh;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 32px; right: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: var(--radius);
+      padding: 12px 20px;
+      font-size: 14px;
+      color: var(--text);
+      box-shadow: 0 8px 32px rgba(0,0,0,.5);
+      z-index: 9000;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all .25s;
+    }
+
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast-success { border-color: rgba(61,189,125,.4); color: var(--green); }
+    .toast-error   { border-color: rgba(224,87,87,.4); color: var(--red); }
+    .toast-warning { border-color: rgba(232,160,48,.4); color: var(--amber); }
+
+    /* ── Divider line ── */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0 32px;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold-dim); }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { height: auto; position: relative; flex-direction: row; flex-wrap: wrap; padding: 12px; }
+      .sidebar-logo { border-bottom: none; border-right: 1px solid var(--border); padding: 8px 16px; }
+      .sidebar-nav { flex-direction: row; flex-wrap: wrap; padding: 8px; gap: 4px; }
+      .sidebar-footer { display: none; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .content-area { padding: 16px; }
+      .topbar { padding: 14px 16px; }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div>
-                <h1>🛕 Review Moderation Center</h1>
-                <p style="font-size: 14px; opacity: 0.9; margin-top: 5px;">Manage and approve user reviews</p>
-            </div>
-            <div class="stats">
-                <div class="stat">
-                    <span class="stat-number" id="pendingCount">0</span>
-                    <span>Pending</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-number" id="approvedCount">0</span>
-                    <span>Approved</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-number" id="rejectedCount">0</span>
-                    <span>Rejected</span>
-                </div>
-            </div>
-        </div>
 
-        <div class="content">
-            <div class="success-message" id="successMessage"></div>
+<div class="layout">
 
-            <div class="filters">
-                <button class="filter-btn active" onclick="loadReviews('pending')">⏳ Pending Reviews</button>
-                <button class="filter-btn" onclick="loadReviews('approved')">✅ Approved</button>
-                <button class="filter-btn" onclick="loadReviews('rejected')">❌ Rejected</button>
-            </div>
-
-            <div id="reviewsContent" class="reviews-container">
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p>Loading reviews...</p>
-                </div>
-            </div>
-        </div>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">Sacred Temples</div>
+      <div class="logo-sub">Admin Control</div>
     </div>
 
-    <!-- Email Modal -->
-    <div id="emailModal" class="email-modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeEmailModal()">&times;</span>
-            <h3>Reviewer Email</h3>
-            <div class="modal-email" id="modalEmail"></div>
-            <p style="font-size: 12px; color: #999; margin-top: 10px;">For verification purposes only</p>
+    <nav class="sidebar-nav">
+      <div class="nav-label">Review Queue</div>
+
+      <button class="filter-tab active" data-filter="pending">
+        <span class="tab-label">
+          <span class="tab-icon">◐</span>
+          Pending
+        </span>
+        <span class="tab-count" id="pendingCount">—</span>
+      </button>
+
+      <button class="filter-tab" data-filter="approved">
+        <span class="tab-label">
+          <span class="tab-icon">✓</span>
+          Approved
+        </span>
+        <span class="tab-count" id="approvedCount">—</span>
+      </button>
+
+      <button class="filter-tab" data-filter="rejected">
+        <span class="tab-label">
+          <span class="tab-icon">✕</span>
+          Rejected
+        </span>
+        <span class="tab-count" id="rejectedCount">—</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <span class="status-dot"></span>
+      Connected · Firebase
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <h1>Review Moderation</h1>
+        <p>Manage and moderate visitor reviews</p>
+      </div>
+      <div class="result-count" id="resultCount">Loading…</div>
+    </header>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card pending">
+        <div class="stat-label">Awaiting</div>
+        <div class="stat-value" id="pendingCount">0</div>
+        <div class="stat-sub">pending reviews</div>
+      </div>
+      <div class="stat-card approved">
+        <div class="stat-label">Published</div>
+        <div class="stat-value" id="approvedCount">0</div>
+        <div class="stat-sub">approved reviews</div>
+      </div>
+      <div class="stat-card rejected">
+        <div class="stat-label">Rejected</div>
+        <div class="stat-value" id="rejectedCount">0</div>
+        <div class="stat-sub">declined reviews</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total</div>
+        <div class="stat-value" id="totalCount">0</div>
+        <div class="stat-sub">all reviews</div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- Content -->
+    <div class="content-area">
+      <div id="reviewsContent">
+        <div class="loading-state">
+          <div class="loader"></div>
+          <p>Loading reviews…</p>
         </div>
+      </div>
     </div>
 
-    <!-- Image Modal -->
-    <div id="imageModal" class="image-modal" onclick="closeImageModal()">
-        <span class="image-close" onclick="closeImageModal()">&times;</span>
-        <img id="modalImage" class="modal-image" src="" alt="">
+  </div>
+</div>
+
+<!-- Email Modal -->
+<div class="modal-overlay" id="emailModal">
+  <div class="modal-box">
+    <div class="modal-title">Reviewer Email</div>
+    <div class="email-display" id="modalEmailText"></div>
+    <div class="modal-close">
+      <button class="btn-close" onclick="closeEmailModal()">Close</button>
     </div>
+  </div>
+</div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, query, where, updateDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+<!-- Image Modal -->
+<div class="modal-overlay" id="imageModal">
+  <div class="modal-box image-modal-content">
+    <img id="modalImage" src="" alt="Review image" />
+    <div class="modal-close" style="margin-top: 16px;">
+      <button class="btn-close" onclick="closeImageModal()">Close</button>
+    </div>
+  </div>
+</div>
 
-        // Initialize Firebase
-        const firebaseConfig = {
-    apiKey: "AIzaSyBtToGx-c7ELLhXXBg_F9K0YGKLsc-JObE",
-    authDomain: "sacred-temples.firebaseapp.com",
-    projectId: "sacred-temples",
-    storageBucket: "sacred-temples.firebasestorage.app",
-    messagingSenderId: "756850869278",
-    appId: "1:756850869278:web:656eb42906c888ad309a0f",
-    measurementId: "G-YMBPSQ532K"
-};
+<!-- Toast -->
+<div class="toast" id="toast"></div>
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        let currentFilter = 'pending';
-        let allReviews = [];
-
-        // Ensure parent document exists so subcollections can be queried
-        async function ensureParentDocExist() {
-            try {
-                const parentRef = doc(db, 'temples', '1');
-                // Always ensure temples/1 has data so it appears in queries
-                await setDoc(parentRef, { 
-                    name: 'Temples Collection',
-                    initialized: true, 
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                }, { merge: true }); // merge: true so it doesn't overwrite existing data
-                console.log('✅ Parent document temples/1 ensured to exist');
-            } catch (error) {
-                console.error('⚠️ Error ensuring parent doc:', error);
-            }
-        }
-
-        // Fetch pending reviews
-        async function fetchPendingReviews() {
-            try {
-                const temples = await getDocs(collection(db, 'temples'));
-                console.log(`📦 Found ${temples.docs.length} temple documents`);
-                const pendingReviews = [];
-
-                for (const templeDoc of temples.docs) {
-                    const templeId = templeDoc.id;
-                    console.log(`🏛️ Checking temple: ${templeId} (${templeDoc.data().name || 'Unknown'})`);
-                    
-                    const reviewsCollection = collection(db, `temples/${templeId}/reviews`);
-                    const q = query(reviewsCollection, where('status', '==', 'pending'));
-                    const snapshot = await getDocs(q);
-                    
-                    console.log(`  └─ Found ${snapshot.docs.length} pending reviews`);
-
-                    snapshot.forEach(doc => {
-                        const reviewData = doc.data();
-                        pendingReviews.push({
-                            id: doc.id,
-                            templeId: templeId,
-                            templeName: templeDoc.data().name || 'Unknown Temple',
-                            ...reviewData,
-                            timestamp: reviewData.timestamp?.toDate?.() || new Date(reviewData.createdAt)
-                        });
-                    });
-                }
-
-                console.log(`✅ Total pending reviews found: ${pendingReviews.length}`);
-                return pendingReviews.sort((a, b) => {
-                    const dateA = new Date(a.timestamp || a.createdAt);
-                    const dateB = new Date(b.timestamp || b.createdAt);
-                    return dateB - dateA;
-                });
-            } catch (error) {
-                console.error('❌ Error fetching pending reviews:', error);
-                console.error('Error details:', error.message);
-                return [];
-            }
-        }
-
-        // Approve a review
-        async function approveReview(templeId, reviewId) {
-            try {
-                const reviewRef = doc(db, `temples/${templeId}/reviews`, reviewId);
-                await updateDoc(reviewRef, {
-                    status: 'approved',
-                    updatedAt: new Date().toISOString()
-                });
-                console.log('✅ Review approved:', reviewId);
-                return { success: true, message: 'Review approved successfully!' };
-            } catch (error) {
-                console.error('❌ Error approving review:', error);
-                return { success: false, error: error.message };
-            }
-        }
-
-        // Reject a review
-        async function rejectReview(templeId, reviewId) {
-            try {
-                const reviewRef = doc(db, `temples/${templeId}/reviews`, reviewId);
-                await updateDoc(reviewRef, {
-                    status: 'rejected',
-                    updatedAt: new Date().toISOString()
-                });
-                console.log('✅ Review rejected:', reviewId);
-                return { success: true, message: 'Review rejected successfully!' };
-            } catch (error) {
-                console.error('❌ Error rejecting review:', error);
-                return { success: false, error: error.message };
-            }
-        }
-
-        // Fetch reviews by status
-        async function fetchAllReviewsByStatus(status) {
-            try {
-                const temples = await getDocs(collection(db, 'temples'));
-                const reviews = [];
-
-                for (const templeDoc of temples.docs) {
-                    const templeId = templeDoc.id;
-                    const reviewsCollection = collection(db, `temples/${templeId}/reviews`);
-                    const q = query(reviewsCollection, where('status', '==', status));
-                    const snapshot = await getDocs(q);
-
-                    snapshot.forEach(doc => {
-                        reviews.push({
-                            id: doc.id,
-                            templeId: templeId,
-                            templeName: templeDoc.data().name || 'Unknown Temple',
-                            ...doc.data(),
-                            timestamp: doc.data().timestamp?.toDate?.() || new Date(doc.data().createdAt)
-                        });
-                    });
-                }
-
-                return reviews.sort((a, b) => {
-                    const dateA = new Date(a.timestamp || a.createdAt);
-                    const dateB = new Date(b.timestamp || b.createdAt);
-                    return dateB - dateA;
-                });
-            } catch (error) {
-                console.error('Error fetching reviews:', error);
-                return [];
-            }
-        }
-
-        // Initial load
-        window.addEventListener('DOMContentLoaded', async () => {
-            console.log('Admin panel loaded');
-            await ensureParentDocExist();
-            await updateStats();
-            loadReviews('pending');
-        });
-
-        window.loadReviews = async function(filter) {
-            currentFilter = filter;
-            
-            // Update active button
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-                // Check if this button matches the current filter
-                if (btn.textContent.toLowerCase().includes(filter)) {
-                    btn.classList.add('active');
-                }
-            });
-
-            const content = document.getElementById('reviewsContent');
-            content.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading reviews...</p></div>';
-
-            try {
-                console.log('Loading reviews with filter:', filter);
-                if (filter === 'pending') {
-                    allReviews = await fetchPendingReviews();
-                    console.log('Pending reviews loaded:', allReviews);
-                } else {
-                    allReviews = await fetchAllReviewsByStatus(filter);
-                    console.log('Reviews with status:', filter, allReviews);
-                }
-
-                displayReviews(allReviews);
-                updateStats();
-            } catch (error) {
-                console.error('Full error:', error);
-                content.innerHTML = `<div class="empty-state"><div class="empty-state-icon">⚠️</div><h2>Error loading reviews</h2><p>${error.message}</p><p style="font-size: 12px; color: #999; margin-top: 10px;">Check browser console (F12) for details</p></div>`;
-            }
-        };
-
-        function displayReviews(reviews) {
-            const content = document.getElementById('reviewsContent');
-            
-            if (reviews.length === 0) {
-                content.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">ðŸ“­</div>
-                        <h2>No reviews found</h2>
-                        <p>There are no ${currentFilter} reviews at the moment.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            content.innerHTML = reviews.map(review => `
-                <div class="review-card">
-                    <div class="review-header">
-                        <div class="review-info">
-                            <div class="reviewer-name">${escapeHtml(review.userName)}</div>
-                            <div class="temple-name">ðŸ›• ${escapeHtml(review.templeName)}</div>
-                            <div class="review-meta">
-                                <div>
-                                    <span class="stars">${'⭐'.repeat(review.rating)}</span>
-                                    <span style="color: #666;">${review.rating}/5</span>
-                                </div>
-                                <div>${formatDate(review.timestamp)}</div>
-                                ${review.status ? `<span class="status-badge status-${review.status}">${review.status.toUpperCase()}</span>` : ''}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="review-content">
-                        "${escapeHtml(review.text.substring(0, 200))}${review.text.length > 200 ? '...' : ''}"
-                    </div>
-
-                    ${review.images && review.images.length > 0 ? `
-                        <div class="review-images">
-                            ${review.images.map(img => `
-                                <img src="${escapeHtml(img.url)}" alt="Review image" onclick="openImageModal('${img.url}')" style="cursor: pointer;">
-                            `).join('')}
-                        </div>
-                    ` : ''}
-
-                    <div class="review-actions">
-                        <button class="btn btn-view-email" onclick="showEmailModal('${escapeHtml(review.email)}')">ðŸ“§ View Email</button>
-                        ${currentFilter === 'pending' ? `
-                            <button class="btn btn-approve" onclick="handleApprove('${review.templeId}', '${review.id}')">✅ Approve</button>
-                            <button class="btn btn-reject" onclick="handleReject('${review.templeId}', '${review.id}')">❌ Reject</button>
-                        ` : ''}
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        window.handleApprove = async function(templeId, reviewId) {
-            if (confirm('Approve this review?')) {
-                const result = await approveReview(templeId, reviewId);
-                if (result.success) {
-                    showSuccessMessage('✅ Review approved successfully!');
-                    await updateStats(); // Update all stats
-                    loadReviews(currentFilter); // Reload current view
-                } else {
-                    alert('Error: ' + result.error);
-                }
-            }
-        };
-
-        window.handleReject = async function(templeId, reviewId) {
-            if (confirm('Reject this review?')) {
-                const result = await rejectReview(templeId, reviewId);
-                if (result.success) {
-                    showSuccessMessage('❌ Review rejected successfully!');
-                    await updateStats(); // Update all stats
-                    loadReviews(currentFilter); // Reload current view
-                } else {
-                    alert('Error: ' + result.error);
-                }
-            }
-        };
-
-        window.showEmailModal = function(email) {
-            document.getElementById('modalEmail').textContent = email;
-            document.getElementById('emailModal').style.display = 'block';
-        };
-
-        window.closeEmailModal = function() {
-            document.getElementById('emailModal').style.display = 'none';
-        };
-
-        window.openImageModal = function(url) {
-            document.getElementById('modalImage').src = url;
-            document.getElementById('imageModal').classList.add('active');
-        };
-
-        window.closeImageModal = function() {
-            document.getElementById('imageModal').classList.remove('active');
-        };
-
-        function showSuccessMessage(message) {
-            const msgEl = document.getElementById('successMessage');
-            msgEl.textContent = message;
-            msgEl.classList.add('show');
-            setTimeout(() => msgEl.classList.remove('show'), 3000);
-        }
-
-        async function updateStats() {
-            const pending = await fetchPendingReviews();
-            const approved = await fetchAllReviewsByStatus('approved');
-            const rejected = await fetchAllReviewsByStatus('rejected');
-            document.getElementById('pendingCount').textContent = pending.length;
-            document.getElementById('approvedCount').textContent = approved.length;
-            document.getElementById('rejectedCount').textContent = rejected.length;
-        }
-
-        function formatDate(date) {
-            if (!date) return 'Recently';
-            const now = new Date();
-            const diffMs = now - date;
-            const diffMins = Math.floor(diffMs / 60000);
-            const diffHours = Math.floor(diffMs / 3600000);
-            const diffDays = Math.floor(diffMs / 86400000);
-
-            if (diffMins < 1) return 'Just now';
-            if (diffMins < 60) return `${diffMins}m ago`;
-            if (diffHours < 24) return `${diffHours}h ago`;
-            if (diffDays < 7) return `${diffDays}d ago`;
-            return date.toLocaleDateString();
-        }
-
-        function escapeHtml(text) {
-            const map = {
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                '"': '&quot;',
-                "'": '&#039;'
-            };
-            return text.replace(/[&<>"']/g, m => map[m]);
-        }
-
-        // Close modals when clicking outside
-        window.onclick = function(event) {
-            const emailModal = document.getElementById('emailModal');
-            const imageModal = document.getElementById('imageModal');
-            
-            if (event.target === emailModal) {
-                emailModal.style.display = 'none';
-            }
-        };
-    </script>
+<script type="module" src="./admin-panel.js"></script>
 </body>
 </html>
