@@ -742,7 +742,8 @@ export const galleryImages = [
     src: "photos/hp10.jpg",
     alt: "beautiful view of hastinapur jain temple",
     title: "kailash-parvat_rachna"
-  }{
+  },
+  {
     id: 24,
     src: "photos/wax.png",
     alt: "beautiful view of hastinapur jain temple",
