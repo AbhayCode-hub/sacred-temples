@@ -328,7 +328,8 @@ export const templesData = [
       phone: "+91 98765 66666",
       email: "chilkurbalaji@hindu.in"
     },
-    image: "photos/chb.jpeg"
+    image: "photos/chb.jpeg",
+    galleryPhotoPrefix: "br"
   },
   {
     id: 7,
@@ -343,7 +344,8 @@ export const templesData = [
       phone: "+91 98765 77777",
       email: "taratarini@temple.org"
     },
-    image: "photos/MAt.jpg"
+    image: "photos/MAt.jpg",
+    galleryPhotoPrefix: "mt"
   },
   {
     id: 8,
@@ -585,7 +587,8 @@ export const templesData = [
       phone: "manager:- mukesh jain (09412551909)",
       email: "jaintirthtourism@gmail.com "
     },
-    image: "photos/hp8.jpg"
+    image: "photos/hp8.jpg",
+    galleryPhotoPrefix: "hp"
   },
   {
     id: 24,
@@ -600,153 +603,110 @@ export const templesData = [
       phone: "+91-8827417276 or +91-8602363166",
       email: "kahannagarsonagir@gmail.com "
     },
-    image: "photos/sng4.jpg"
+    image: "photos/sng4.jpg",
+    galleryPhotoPrefix: "sng"
   }
 ];
 
-export const galleryImages = [
-  {
-    id: 1,
-    src: "photos/kp4.jpg",
-    alt: "Jain Temple Architecture",
-    title: "Intricate Jain Temple Carvings"
-  },
-  {
-    id: 2,
-    src: "photos/mt1.jpg",
-    alt: "Mountain Temple View",
-    title: "Temples on Sacred Mountains"
-  },
-  {
-    id: 3,
-    src: "photos/br1.jpg",
-    alt: "Hindu Temple Structure",
-    title: "Traditional Hindu Architecture"
-  },
-  {
-    id: 4,
-    src: "photos/gt.jpg",
-    alt: "Temple at Sunrise",
-    title: "Golden Hour at Sacred Sites"
-  },
-  {
-    id: 5,
-    src: "photos/ssmt1.jpg",
-    alt: "Coastal Temple",
-    title: "Temples by the Sea"
-  },
-  {
-    id: 6,
-    src: "photos/br4.jpg",
-    alt: "Temple Complex",
-    title: "Historic Temple Complex"
-  },
-  {
-    id: 7,
-    src: "photos/g.jpg",
-    alt: "Gurdwara Architecture",
-    title: "Sikh Gurdwara Design"
-  },
-  {
-    id: 8,
-    src: "photos/ms.jpg",
-    alt: "Mosque Structure",
-    title: "Islamic Architectural Beauty"
-  },
-  {
-    id: 9,
-    src: "photos/khaj.jpg",
-    alt: "Ancient Temple Ruins",
-    title: "Preserved Ancient Temples"
-  },
-  {
-    id: 10,
-    src: "photos/add.jpeg",
-    alt: "Temple Deity",
-    title: "Sacred Temple Idols"
-  },
-  {
-    id: 11,
-    src: "photos/orr.jpeg",
-    alt: "Temple Interior",
-    title: "Ornate Temple Interiors"
-  },
-  {
-    id: 12,
-    src: "photos/Parvati.jpeg",
-    alt: "Hilltop Temple",
-    title: "Temples in the Hills"
-  },
-  {
-    id: 13,
-    src: "photos/kp3.jpeg",
-    alt: "Hilltop Temple",
-    title: "Temples in the Hills"
-  },
-  {
-    id: 14,
-    src: "photos/kp11.jpg",
-    alt: "Hilltop view of Temple",
-    title: "bade baba jain mandir "
-  },
-  {
-    id: 15,
-    src: "photos/kp9.jpg",
-    alt: "amazing Temple",
-    title: "kundalpur "
-  },
-  {
-    id: 16,
-    src: "photos/mt4.jpeg",
-    alt: "amazing Temple",
-    title: "Temples in the top of  Hills"
-  },
- {
-    id: 17,
-    src: "photos/gp1.jpg",
-    alt: "girnar temple",
-    title: "Temples in the top of  Hills"
-  },
-  {
-    id: 18,
-    src: "photos/gp4.jpg",
-    alt: "top view of girnar temple",
-    title: "top view of girnar Hills"
-  },
-  {
-    id: 19,
-    src: "photos/gp6.jpg",
-    alt: "front view of girnar hill ",
-    title: "front view of girnar Hills"
-  },
-  {
-    id: 20,
-    src: "photos/hp6.jpg",
-    alt: "beautiful view of hastinapur jain temple ",
-    title: "teen lok rachna"
-  },
-  {
-    id: 21,
-    src: "photos/hp7.jpg",
-    alt: "beautiful view of hastinapur jain temple ",
-    title: "Ashtapad Teerth"
-  },
-  {
-    id: 22,
-    src: "photos/hp9.jpg",
-    alt: "beautiful view of hastinapur jain temple ",
-    title: "Terahdweep  Bada jain mandir  "
-  },
-  {
-    id: 23,
-    src: "photos/hp10.jpg",
-    alt: "beautiful view of hastinapur jain temple",
-    title: "kailash-parvat_rachna"
-  },
-  {
-    id: 24,
-    src: "photos/wax.png",
-    alt: "beautiful view of hastinapur jain temple",
-    title: "kailash-parvat_rachna"
+// Gallery images organized by temple prefix - makes it easier to add images
+export const templeGalleries = {
+  kp: [
+    { filename: "kp4.jpg", alt: "Jain Temple Architecture", title: "Intricate Jain Temple Carvings" },
+    { filename: "kp3.jpeg", alt: "Hilltop Temple", title: "Temples in the Hills" },
+    { filename: "kp11.jpg", alt: "Hilltop view of Temple", title: "Bade Baba Jain Mandir" },
+    { filename: "kp9.jpg", alt: "Amazing Temple", title: "Kundalpur" },
+    { filename: "kp1.jpg", alt: "Temple Exterior", title: "Bade Baba Temple View" }
+  ],
+  mt: [
+    { filename: "mt1.jpg", alt: "Mountain Temple View", title: "Temples on Sacred Mountains" },
+    { filename: "mt4.jpeg", alt: "Mountain Peak", title: "Mangi Tungi Peak" },
+    { filename: "mt6.jpg", alt: "Twin Mountains", title: "Twin Sacred Peaks" }
+  ],
+  br: [
+    { filename: "br1.jpg", alt: "Hindu Temple Structure", title: "Traditional Hindu Architecture" },
+    { filename: "br4.jpg", alt: "Temple Complex", title: "Historic Temple Complex" }
+  ],
+  gt: [
+    { filename: "gt.jpg", alt: "Temple at Sunrise", title: "Golden Hour at Sacred Sites" }
+  ],
+  gp: [
+    { filename: "gp3.jpg", alt: "Mountain Temple", title: "Girnar Temple Views" },
+    { filename: "gp1.jpg", alt: "Temple Stairs", title: "Ancient Temple Steps" },
+    { filename: "gp4.jpg", alt: "Temple Architecture", title: "Girnar Temple Design" },
+    { filename: "gp6.jpg", alt: "Summit View", title: "Temple Summit Views" }
+  ],
+  pj: [
+    { filename: "pj.jpeg", alt: "Hilltop Temple", title: "Hastagiri Temple" }
+  ],
+  mg: [
+    { filename: "mg2.jpg", alt: "Temple on Hill", title: "Muktagiri Hill Temple" }
+  ],
+  ssmt: [
+    { filename: "ssmt.jpeg", alt: "Coastal Temple", title: "Temples by the Sea" },
+    { filename: "ssmt1.jpg", alt: "Tidal Temple", title: "Submerged Temple View" }
+  ],
+  makt: [
+    { filename: "makt.png", alt: "Shakti Peeth", title: "Kamakhya Temple" }
+  ],
+  kbt: [
+    { filename: "kbt.jpg", alt: "Kaal Bhairav Temple", title: "Ancient Bhairav Shrine" }
+  ],
+  hp: [
+    { filename: "hp8.jpg", alt: "Jain Temple Complex", title: "Hastinapur Temple" },
+    { filename: "hp1.jpg", alt: "Temple Structure", title: "Ancient Jain Temple" },
+    { filename: "hp3.jpg", alt: "Temple Details", title: "Intricate Carvings" },
+    { filename: "hp4.jpg", alt: "Temple Courtyard", title: "Temple Complex" },
+    { filename: "hp5.jpeg", alt: "Temple Entrance", title: "Main Temple Gate" },
+    { filename: "hp6.jpg", alt: "Temple Dome", title: "Architectural Dome" },
+    { filename: "hp7.jpg", alt: "Temple Interior", title: "Sacred Interior" },
+    { filename: "hp9.jpg", alt: "Temple Art", title: "Artistic Elements" },
+    { filename: "hp10.jpg", alt: "Temple View", title: "Overall View" }
+  ],
+  sng: [
+    { filename: "sng4.jpg", alt: "Sonagiri Temple", title: "Sonagiri Jain Temple" },
+    { filename: "sng1.jpg", alt: "Temple Complex", title: "Temple Complex View" },
+    { filename: "sng2.jpg", alt: "Sacred Mountain", title: "Temple Mountain" },
+    { filename: "sng3.jpg", alt: "Temple Architecture", title: "Temple Design" },
+    { filename: "sng5.jpg", alt: "Temple Steps", title: "Temple Stairway" },
+    { filename: "sng6.jpg", alt: "Temple Details", title: "Architectural Details" },
+    { filename: "sng7.jpg", alt: "Temple Dome", title: "Temple Dome" },
+    { filename: "sng8.jpg", alt: "Temple Stairs", title: "Sacred Stairway" },
+    { filename: "sng9.jpg", alt: "Temple View", title: "Temple Overview" },
+    { filename: "sng10.jpg", alt: "Temple Site", title: "Site View" }
+  ],
+  g: [
+    { filename: "g.jpg", alt: "Gurdwara Architecture", title: "Sikh Gurdwara Design" }
+  ],
+  ms: [
+    { filename: "ms.jpg", alt: "Mosque Structure", title: "Islamic Architectural Beauty" }
+  ],
+  khaj: [
+    { filename: "khaj.jpg", alt: "Ancient Temple Ruins", title: "Preserved Ancient Temples" }
+  ],
+  nm: [
+    { filename: "nm.jpg", alt: "Historic Mosque", title: "Najibabad Mosque" },
+    { filename: "nmg.jpg", alt: "Gurudwara View", title: "Nanakmatta Gurudwara" }
+  ]
+};
+
+// Helper function: Generates gallery images array from templeGalleries
+function generateGalleryImages() {
+  let id = 1;
+  const allImages = [];
+  
+  for (const prefix in templeGalleries) {
+    const photos = templeGalleries[prefix];
+    photos.forEach(photo => {
+      allImages.push({
+        id: id++,
+        src: `photos/${photo.filename}`,
+        alt: photo.alt,
+        title: photo.title
+      });
+    });
   }
-];
+  
+  return allImages;
+}
+
+export const galleryImages = generateGalleryImages();
