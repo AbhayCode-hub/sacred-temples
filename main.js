@@ -4,22 +4,8 @@ import { templesData, galleryImages, templeGalleries } from './temples-data.js'
 import { loadHotelsForTemple, createFilterControls, attachFilterListeners, resetHotelDisplay } from './hotels-ui.js'
 import { createTransportSection, initTransportSection } from './transport-ui.js'
 import { initializeReviewSection } from './review-ui.js'
-import { initializeApp as initFirebaseApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js'
-import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js'
-
-// Firebase config
-const firebaseConfig = {
-  apiKey: "AIzaSyBtToGx-c7ELLhXXBg_F9K0YGKLsc-JObE",
-  authDomain: "sacred-temples.firebaseapp.com",
-  projectId: "sacred-temples",
-  storageBucket: "sacred-temples.firebasestorage.app",
-  messagingSenderId: "756850869278",
-  appId: "1:756850869278:web:656eb42906c888ad309a0f",
-  measurementId: "G-YMBQ532K"
-};
-
-const app = initFirebaseApp(firebaseConfig);
-const db = getFirestore(app);
+import { db } from './firebase-config.js'
+import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js'
 
 
 let currentFilter = 'all';
