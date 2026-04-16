@@ -1,4 +1,5 @@
 import './style.css'
+import './visitor-counter.js'
 import { templesData, galleryImages } from './temples-data.js'
 import { loadHotelsForTemple, createFilterControls, attachFilterListeners, resetHotelDisplay } from './hotels-ui.js'
 import { createTransportSection, initTransportSection } from './transport-ui.js'
