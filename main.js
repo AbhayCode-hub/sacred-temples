@@ -260,15 +260,6 @@ async function loadHotelsSection(temple) {
     // Load hotels
     await loadHotelsForTemple(temple);
     
-    // Add filter controls after hotels are loaded
-    setTimeout(() => {
-      const hotelFiltersDiv = document.getElementById('hotelFilters');
-      if (hotelFiltersDiv && hotelContainer && hotelContainer.querySelector('.hotels-grid')) {
-        // Load filter controls for ALL religions, not just Hindu
-        hotelFiltersDiv.innerHTML = createFilterControls(currentHotels);
-        attachFilterListeners();
-      }
-    }, 500);
   } catch (error) {
     console.error('Error loading hotels section:', error);
   }
