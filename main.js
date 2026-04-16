@@ -1,9 +1,25 @@
 import './style.css'
 import './visitor-counter.js'
-import { templesData, galleryImages } from './temples-data.js'
+import { templesData, galleryImages, templeGalleries } from './temples-data.js'
 import { loadHotelsForTemple, createFilterControls, attachFilterListeners, resetHotelDisplay } from './hotels-ui.js'
 import { createTransportSection, initTransportSection } from './transport-ui.js'
 import { initializeReviewSection } from './review-ui.js'
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js'
+import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js'
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyBtToGx-c7ELLhXXBg_F9K0YGKLsc-JObE",
+  authDomain: "sacred-temples.firebaseapp.com",
+  projectId: "sacred-temples",
+  storageBucket: "sacred-temples.firebasestorage.app",
+  messagingSenderId: "756850869278",
+  appId: "1:756850869278:web:656eb42906c888ad309a0f",
+  measurementId: "G-YMBPSQ532K"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 
 let currentFilter = 'all';
@@ -253,6 +269,33 @@ function showTempleDetails(templeId) {
  * Load hotels section and attach listeners
  * @param {Object} temple - Temple object
  */
+async function fetchFirestoreGalleryImages(templeId) {
+  try {
+    const galleryRef = collection(db, `temples/${templeId}/gallery`);
+    const snapshot = await getDocs(galleryRef);
+    const images = [];
+    
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      images.push({
+        url: data.url,
+        uploadedBy: data.uploadedBy || 'User',
+        caption: data.caption || ''
+      });
+    });
+    
+    console.log(`Fetched ${images.length} gallery images from Firestore for temple ${templeId}`);
+    return images;
+  } catch (error) {
+    console.error('Error fetching Firestore gallery images:', error);
+    return [];
+  }
+}
+
+/**
+ * Load hotels section and attach listeners
+ * @param {Object} temple - Temple object
+ */
 async function loadHotelsSection(temple) {
   const hotelContainer = document.getElementById('hotelContainer');
   
@@ -264,9 +307,9 @@ async function loadHotelsSection(temple) {
     console.error('Error loading hotels section:', error);
   }
 
-  // Load gallery images - only for this specific temple
+  // Load gallery images - combine static + Firestore images for this temple
   const templeGalleryGrid = document.getElementById('templeGalleryGrid');
-  if (templeGalleryGrid && temple.galleryPhotoPrefix) {
+  if (templeGalleryGrid) {
     // Show skeleton loading first
     templeGalleryGrid.innerHTML = `
       <div class="skeleton-gallery">
@@ -278,15 +321,36 @@ async function loadHotelsSection(temple) {
       </div>
     `;
 
-    // Filter gallery images to only show photos for this temple
-    const templePhotos = galleryImages.filter(img => 
-      img.src.includes(temple.galleryPhotoPrefix)
-    );
-    
-    if (templePhotos.length > 0) {
-      // Start loading with minimum 300ms delay to show skeleton briefly
-      setTimeout(() => {
-        templeGalleryGrid.innerHTML = templePhotos.map(img => `
+    // Start loading with minimum 300ms delay to show skeleton briefly
+    setTimeout(async () => {
+      // Get static gallery photos from temples-data.js
+      let allPhotos = [];
+      
+      if (temple.galleryPhotoPrefix && templeGalleries[temple.galleryPhotoPrefix]) {
+        const staticPhotos = templeGalleries[temple.galleryPhotoPrefix];
+        allPhotos = staticPhotos.map(photo => ({
+          src: `photos/${photo.filename}`,
+          alt: photo.alt,
+          title: photo.title,
+          type: 'static'
+        }));
+      }
+      
+      // Fetch Firestore gallery images
+      const firestoreImages = await fetchFirestoreGalleryImages(temple.id);
+      const firestorePhotos = firestoreImages.map((img, idx) => ({
+        src: img.url,
+        alt: `Gallery photo by ${img.uploadedBy}`,
+        title: img.caption || `By ${img.uploadedBy}`,
+        uploadedBy: img.uploadedBy,
+        type: 'user'
+      }));
+      
+      // Combine both
+      allPhotos = [...firestorePhotos, ...allPhotos];
+      
+      if (allPhotos.length > 0) {
+        templeGalleryGrid.innerHTML = allPhotos.map(img => `
           <div class="gallery-item">
             <img 
               src="${img.src}" 
@@ -296,6 +360,7 @@ async function loadHotelsSection(temple) {
             >
             <div class="gallery-overlay">
               <p class="gallery-title">${img.title}</p>
+              ${img.type === 'user' ? `<p class="gallery-credit">by ${img.uploadedBy}</p>` : ''}
             </div>
           </div>
         `).join('');
@@ -316,13 +381,11 @@ async function loadHotelsSection(temple) {
             });
           }
         });
-      }, 300);
-    } else {
-      // If no specific photos, show message after skeleton
-      setTimeout(() => {
-        templeGalleryGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999; padding: 2rem;">More photos coming soon...</p>';
-      }, 600);
-    }
+      } else {
+        // If no photos at all, show message
+        templeGalleryGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999; padding: 2rem;">Gallery photos coming soon...</p>';
+      }
+    }, 300);
   }
 }
 

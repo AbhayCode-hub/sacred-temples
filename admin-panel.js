@@ -7,7 +7,9 @@ import {
     query,
     where,
     updateDoc,
-    doc
+    doc,
+    addDoc,
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 import {
     getAuth,
@@ -103,6 +105,39 @@ async function updateReviewStatus(templeId, reviewId, status) {
         });
         return { success: true };
     } catch (error) {
+        return { success: false, error: error.message };
+    }
+}
+
+async function addImagesToGallery(templeId, reviewId, images, reviewerName) {
+    try {
+        if (!images || images.length === 0) {
+            return { success: false, error: 'No images to add' };
+        }
+
+        console.log(`Adding ${images.length} images to gallery for temple ${templeId}`);
+
+        // Add each image to the temple gallery
+        for (const img of images) {
+            console.log(`Adding image: ${img.url}`);
+            await addDoc(collection(db, `temples/${templeId}/gallery`), {
+                url: img.url,
+                reviewId: reviewId,
+                uploadedBy: reviewerName,
+                addedAt: serverTimestamp(),
+                caption: img.caption || ''
+            });
+        }
+
+        console.log('Images added successfully, approving review...');
+        
+        // Also approve the review automatically
+        await updateReviewStatus(templeId, reviewId, 'approved');
+
+        console.log('Review approved successfully');
+        return { success: true };
+    } catch (error) {
+        console.error('Error adding images to gallery:', error);
         return { success: false, error: error.message };
     }
 }
@@ -220,6 +255,11 @@ function displayReviews(reviews) {
                     <span>✉</span> Email
                 </button>
                 ${currentFilter === 'pending' ? `
+                    ${review.images && review.images.length > 0 ? `
+                        <button class="action-btn gallery-btn" onclick="handleAddToGallery('${review.templeId}', '${review.id}', '${escapeHtml(JSON.stringify(review.images))}', '${escapeHtml(review.userName)}')">
+                            <span>📸</span> Add to Gallery
+                        </button>
+                    ` : ''}
                     <button class="action-btn approve-btn" onclick="handleApprove('${review.templeId}', '${review.id}')">
                         <span>✓</span> Approve
                     </button>
@@ -278,6 +318,35 @@ window.handleReject = async function (templeId, reviewId) {
         loadReviews(currentFilter);
     } else {
         showToast('Error: ' + result.error, 'error');
+    }
+};
+
+window.handleAddToGallery = async function (templeId, reviewId, imagesJson, reviewerName) {
+    if (!isAuthenticated) {
+        showToast('Please log in to add images to gallery', 'error');
+        return;
+    }
+    
+    try {
+        // Parse the images JSON string
+        const images = JSON.parse(imagesJson);
+        
+        if (!images || images.length === 0) {
+            showToast('No images to add', 'error');
+            return;
+        }
+
+        const result = await addImagesToGallery(templeId, reviewId, images, reviewerName);
+        if (result.success) {
+            showToast(`${images.length} image(s) added to gallery & review approved! 📸`, 'success');
+            updateStats();
+            loadReviews(currentFilter);
+        } else {
+            showToast('Error: ' + result.error, 'error');
+        }
+    } catch (error) {
+        console.error('JSON parse error:', error);
+        showToast('Failed to add images: ' + error.message, 'error');
     }
 };
 
