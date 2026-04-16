@@ -649,7 +649,8 @@ export const templeGalleries = {
     { filename: "makt.png", alt: "Shakti Peeth", title: "Kamakhya Temple" }
   ],
   kbt: [
-    { filename: "kbt.jpg", alt: "Kaal Bhairav Temple", title: "Ancient Bhairav Shrine" }
+    { filename: "kbt.jpg", alt: "Kaal Bhairav Temple", title: "Ancient Bhairav Shrine" },
+    {filename: "wax .jpg", alt: "testing this image", title: "test" }
   ],
   hp: [
     { filename: "hp8.jpg", alt: "Jain Temple Complex", title: "Hastinapur Temple" },
