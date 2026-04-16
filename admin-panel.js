@@ -1,5 +1,14 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getFirestore, collection, getDocs, query, where, updateDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+import {
+    getFirestore,
+    collection,
+    collectionGroup,   // ← KEY FIX: query across all 'reviews' subcollections
+    getDocs,
+    query,
+    where,
+    updateDoc,
+    doc
+} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBtToGx-c7ELLhXXBg_F9K0YGKLsc-JObE",
@@ -17,41 +26,63 @@ const db = getFirestore(app);
 let currentFilter = 'pending';
 let allReviews = [];
 
-async function ensureParentDocExist() {
-    try {
-        const parentRef = doc(db, 'temples', '1');
-        await setDoc(parentRef, {
-            name: 'Temples Collection',
-            initialized: true,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
-        }, { merge: true });
-    } catch (error) {
-        console.error('Error ensuring parent doc:', error);
-    }
-}
-
+// ─────────────────────────────────────────────────────────────────────────────
+// FIX 1: Use collectionGroup('reviews') instead of iterating temple documents.
+//
+// The old approach called getDocs(collection(db, 'temples')) and looped over
+// results. But Firestore does NOT return "ghost" documents — documents that
+// have subcollections but no fields of their own. Those show the warning:
+//   "This document does not exist, it will not appear in queries or snapshots."
+//
+// collectionGroup('reviews') queries ALL subcollections named 'reviews' across
+// the entire database, regardless of whether parent documents exist.
+//
+// NOTE: collectionGroup queries require a Firestore index.
+// If you see a "requires an index" error in the console, click the link in the
+// error message to create it automatically in the Firebase Console, OR go to:
+//   Firebase Console → Firestore → Indexes → Composite → Add index
+//   Collection group: reviews | Field: status (Ascending) | Query scope: Collection group
+// ─────────────────────────────────────────────────────────────────────────────
 async function fetchReviewsByStatus(status) {
     try {
-        const temples = await getDocs(collection(db, 'temples'));
+        const q = query(
+            collectionGroup(db, 'reviews'),
+            where('status', '==', status)
+        );
+        const snapshot = await getDocs(q);
         const reviews = [];
-        for (const templeDoc of temples.docs) {
-            const templeId = templeDoc.id;
-            const q = query(collection(db, `temples/${templeId}/reviews`), where('status', '==', status));
-            const snapshot = await getDocs(q);
-            snapshot.forEach(d => {
-                reviews.push({
-                    id: d.id,
-                    templeId,
-                    templeName: templeDoc.data().name || 'Unknown Temple',
-                    ...d.data(),
-                    timestamp: d.data().timestamp?.toDate?.() || new Date(d.data().createdAt)
-                });
+
+        for (const d of snapshot.docs) {
+            // d.ref.parent.parent is the temple document reference
+            const templeRef = d.ref.parent.parent;
+            let templeName = 'Unknown Temple';
+
+            try {
+                const templeSnap = await getDocs(
+                    query(collection(db, 'temples'), where('__name__', '==', templeRef.id))
+                );
+                if (!templeSnap.empty) {
+                    templeName = templeSnap.docs[0].data().name || `Temple ${templeRef.id}`;
+                }
+            } catch (_) {
+                // Temple doc may not exist — use fallback name
+                templeName = `Temple ${templeRef.id}`;
+            }
+
+            reviews.push({
+                id: d.id,
+                templeId: templeRef.id,
+                templeName,
+                ...d.data(),
+                timestamp: d.data().timestamp?.toDate?.() || new Date(d.data().createdAt)
             });
         }
+
         return reviews.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     } catch (error) {
         console.error('Error fetching reviews:', error);
+        // If error mentions "requires an index", a composite index must be created.
+        // Check the Firebase Console link in the error for a one-click fix.
         return [];
     }
 }
@@ -93,6 +124,28 @@ function starHTML(rating) {
     ).join('');
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// FIX 2: The HTML has duplicate IDs (pendingCount, approvedCount, rejectedCount)
+// — one set in the sidebar tabs, one in the stats row. getElementById() only
+// finds the FIRST match, so one set never updates.
+//
+// This helper updates ALL elements that share a given id using querySelectorAll.
+// ─────────────────────────────────────────────────────────────────────────────
+function animateCount(id, target) {
+    const elements = document.querySelectorAll(`#${id}`);
+    if (!elements.length) return;
+    const start = parseInt(elements[0].textContent) || 0;
+    const duration = 600;
+    const startTime = performance.now();
+    const update = (time) => {
+        const progress = Math.min((time - startTime) / duration, 1);
+        const value = Math.round(start + (target - start) * progress);
+        elements.forEach(el => el.textContent = value);
+        if (progress < 1) requestAnimationFrame(update);
+    };
+    requestAnimationFrame(update);
+}
+
 async function updateStats() {
     const [pending, approved, rejected] = await Promise.all([
         fetchReviewsByStatus('pending'),
@@ -103,20 +156,6 @@ async function updateStats() {
     animateCount('approvedCount', approved.length);
     animateCount('rejectedCount', rejected.length);
     animateCount('totalCount', pending.length + approved.length + rejected.length);
-}
-
-function animateCount(id, target) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const start = parseInt(el.textContent) || 0;
-    const duration = 600;
-    const startTime = performance.now();
-    const update = (time) => {
-        const progress = Math.min((time - startTime) / duration, 1);
-        el.textContent = Math.round(start + (target - start) * progress);
-        if (progress < 1) requestAnimationFrame(update);
-    };
-    requestAnimationFrame(update);
 }
 
 function showToast(message, type = 'success') {
@@ -142,7 +181,7 @@ function displayReviews(reviews) {
     }
 
     content.innerHTML = reviews.map((review, i) => `
-        <div class="review-card" style="animation-delay: ${i * 60}ms">
+        <div class="review-card" data-review-id="${review.id}" style="animation-delay: ${i * 60}ms">
             <div class="review-card-header">
                 <div class="reviewer-avatar">${review.userName ? review.userName.charAt(0).toUpperCase() : '?'}</div>
                 <div class="reviewer-meta">
@@ -205,7 +244,6 @@ window.loadReviews = async function (filter) {
 };
 
 window.handleApprove = async function (templeId, reviewId) {
-    const card = document.querySelector(`[data-review-id="${reviewId}"]`);
     const result = await updateReviewStatus(templeId, reviewId, 'approved');
     if (result.success) {
         showToast('Review approved ✓', 'success');
@@ -246,7 +284,6 @@ window.closeImageModal = function () {
 };
 
 window.addEventListener('DOMContentLoaded', async () => {
-    await ensureParentDocExist();
     await updateStats();
     loadReviews('pending');
 
