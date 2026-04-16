@@ -329,7 +329,56 @@ export const templesData = [
       email: "chilkurbalaji@hindu.in"
     },
     image: "photos/chb.jpeg",
-    galleryPhotoPrefix: "br"
+    galleryPhotoPrefix: "br",
+    transport: {
+      bus: {
+        nearestBusStop: "Chilkur Temple Bus Stop",
+        busStopDistance: "0.2 km",
+        majorRoutes: [
+          { number: "555", operatedBy: "TSRTC", frequency: "Every 15 mins" },
+          { number: "556", operatedBy: "TSRTC", frequency: "Every 20 mins" },
+          { number: "668", operatedBy: "TSRTC", frequency: "Every 30 mins" }
+        ],
+        busStandDistance: "15 km",
+        estimatedBusTime: "25-35 minutes"
+      },
+      railway: {
+        nearestStation: "Hyderabad Central Railway Station",
+        distance: "25 km",
+        estimatedTime: "45-60 minutes by taxi",
+        majorTrains: [
+          { name: "Shatabdi Express", from: "Delhi", to: "Hyderabad", stopTime: "09:30" },
+          { name: "Rajdhani Express", from: "Delhi", to: "Hyderabad", stopTime: "16:15" },
+          { name: "Golconda Express", from: "Mumbai", to: "Hyderabad", stopTime: "08:00" }
+        ],
+        ticketApproximately: "₹150-300"
+      },
+      airport: {
+        nearestAirport: "Rajiv Gandhi International Airport, Hyderabad",
+        distance: "30 km",
+        estimatedTime: "1 hour by taxi",
+        terminals: ["Terminal 1", "Terminal 2"],
+        taxiApproximate: "₹600-800"
+      },
+      localTransport: [
+        { type: "Auto Rickshaw", from: "Temple Area", distance: "2 km", cost: "₹40-60" },
+        { type: "Taxi/Uber", from: "RGIA Airport", distance: "30 km", cost: "₹600-800" },
+        { type: "Metro", from: "Hyderabad Metro", distance: "5 km", cost: "₹10-25" },
+        { type: "Car Rental", availability: "At city center", cost: "₹800-1200/day" }
+      ],
+      recommendedRoute: {
+        title: "Best Option: Taxi/Uber from Airport or City",
+        description: "Direct taxi from Hyderabad airport or city center. Easy navigation with good road connectivity.",
+        advantages: [
+          "Quick and convenient access",
+          "Good road connectivity",
+          "Affordable taxi services available",
+          "Airport has direct routes to temple"
+        ],
+        totalEstimatedTime: "45 minutes - 1 hour",
+        totalCost: "₹600-800 (from airport) or ₹200-300 (from city center)"
+      }
+    }
   },
   {
     id: 7,
@@ -345,7 +394,56 @@ export const templesData = [
       email: "taratarini@temple.org"
     },
     image: "photos/MAt.jpg",
-    galleryPhotoPrefix: "mt"
+    galleryPhotoPrefix: "mt",
+    transport: {
+      bus: {
+        nearestBusStop: "Berhampur Bus Stand",
+        busStopDistance: "12 km",
+        majorRoutes: [
+          { number: "110", operatedBy: "Odisha State Roadways", frequency: "Every 30 mins" },
+          { number: "112", operatedBy: "Odisha State Roadways", frequency: "Every 45 mins" },
+          { number: "Private", operatedBy: "Private Transport", frequency: "Every 60 mins" }
+        ],
+        busStandDistance: "12 km",
+        estimatedBusTime: "20-30 minutes"
+      },
+      railway: {
+        nearestStation: "Berhampur Railway Station",
+        distance: "15 km",
+        estimatedTime: "30-40 minutes by taxi",
+        majorTrains: [
+          { name: "Howrah-Chennai Exp", from: "Kolkata", to: "Chennai", stopTime: "11:20" },
+          { name: "Coromandel Express", from: "Delhi", to: "Chennai", stopTime: "14:35" },
+          { name: "East Coast Express", from: "Kolkata", to: "Visakhapatnam", stopTime: "09:15" }
+        ],
+        ticketApproximately: "₹100-200"
+      },
+      airport: {
+        nearestAirport: "Bhubaneswar International Airport",
+        distance: "100 km",
+        estimatedTime: "2 hours by taxi",
+        terminals: ["Main Terminal"],
+        taxiApproximate: "₹1500-2000"
+      },
+      localTransport: [
+        { type: "Auto Rickshaw", from: "Temple Area", distance: "12 km", cost: "₹150-200" },
+        { type: "Taxi/Uber", from: "Berhampur Station", distance: "15 km", cost: "₹300-400" },
+        { type: "Shared Jeep", from: "Bus Stand", distance: "12 km", cost: "₹50-80" },
+        { type: "Car Rental", availability: "At Berhampur", cost: "₹1000-1500/day" }
+      ],
+      recommendedRoute: {
+        title: "Best Option: Train to Berhampur + Local Transport",
+        description: "Take train to Berhampur, then taxi/shared jeep to temple. Most economical route.",
+        advantages: [
+          "Good railway connectivity",
+          "Affordable local transport available",
+          "Scenic route through Odisha",
+          "Well-established pilgrimage route"
+        ],
+        totalEstimatedTime: "2-3 hours",
+        totalCost: "₹100-200 (train) + ₹150-200 (taxi)"
+      }
+    }
   },
   {
     id: 8,
@@ -360,7 +458,56 @@ export const templesData = [
       phone: "+91 98765 88888",
       email: "stambheshwar@mahadev.in"
     },
-    image: "photos/ssmt.jpeg"
+    image: "photos/ssmt.jpeg",
+    transport: {
+      bus: {
+        nearestBusStop: "Kavi Kamboi Bus Stop",
+        busStopDistance: "1 km",
+        majorRoutes: [
+          { number: "101", operatedBy: "Gujarat State Roadways", frequency: "Every 40 mins" },
+          { number: "102", operatedBy: "Gujarat State Roadways", frequency: "Every 60 mins" },
+          { number: "Private", operatedBy: "Private Transport", frequency: "Every 90 mins" }
+        ],
+        busStandDistance: "8 km",
+        estimatedBusTime: "15-20 minutes"
+      },
+      railway: {
+        nearestStation: "Ankleshwar Railway Station",
+        distance: "18 km",
+        estimatedTime: "30-45 minutes by taxi",
+        majorTrains: [
+          { name: "Mandovi Express", from: "Delhi", to: "Goa", stopTime: "07:00" },
+          { name: "Gujarat Express", from: "Mumbai", to: "Ahmedabad", stopTime: "06:30" },
+          { name: "Somnath Express", from: "Mumbai", to: "Somnath", stopTime: "18:00" }
+        ],
+        ticketApproximately: "₹80-150"
+      },
+      airport: {
+        nearestAirport: "Surat International Airport",
+        distance: "45 km",
+        estimatedTime: "1 hour by taxi",
+        terminals: ["Main Terminal"],
+        taxiApproximate: "₹800-1200"
+      },
+      localTransport: [
+        { type: "Auto Rickshaw", from: "Temple Area", distance: "8 km", cost: "₹80-120" },
+        { type: "Taxi/Uber", from: "Surat Airport", distance: "45 km", cost: "₹800-1200" },
+        { type: "Bike Rental", availability: "Available in town", cost: "₹200-300/day" },
+        { type: "Car Rental", availability: "At Ankleshwar", cost: "₹900-1300/day" }
+      ],
+      recommendedRoute: {
+        title: "Best Option: Train to Ankleshwar + Taxi",
+        description: "Train to Ankleshwar station, then taxi to Stambheshwar. Good connectivity and affordable.",
+        advantages: [
+          "Good railway connectivity from Mumbai/Ahmedabad",
+          "Scenic coastal route",
+          "Affordable transportation",
+          "Easy access to tidal timings information"
+        ],
+        totalEstimatedTime: "2-3 hours",
+        totalCost: "₹80-150 (train) + ₹200-300 (taxi)"
+      }
+    }
   },
   {
     id: 9,
@@ -376,7 +523,56 @@ export const templesData = [
       email: "kamakhya@shakti.org"
     },
     image: "photos/makt.png",
-    galleryPhotoPrefix: "makt"
+    galleryPhotoPrefix: "makt",
+    transport: {
+      bus: {
+        nearestBusStop: "Kamakhya Temple Bus Stop",
+        busStopDistance: "0.5 km",
+        majorRoutes: [
+          { number: "7", operatedBy: "Assam State Transport", frequency: "Every 15 mins" },
+          { number: "9", operatedBy: "Assam State Transport", frequency: "Every 20 mins" },
+          { number: "15", operatedBy: "ASTC", frequency: "Every 25 mins" }
+        ],
+        busStandDistance: "3 km",
+        estimatedBusTime: "10-15 minutes"
+      },
+      railway: {
+        nearestStation: "Guwahati Railway Station",
+        distance: "8 km",
+        estimatedTime: "20-30 minutes by taxi",
+        majorTrains: [
+          { name: "Rajdhani Express", from: "Delhi", to: "Guwahati", stopTime: "10:30" },
+          { name: "Brahmaputra Express", from: "Delhi", to: "Guwahati", stopTime: "06:15" },
+          { name: "Northeast Express", from: "Kolkata", to: "Guwahati", stopTime: "18:45" }
+        ],
+        ticketApproximately: "₹200-400"
+      },
+      airport: {
+        nearestAirport: "Lokpriya Gopinath Bordoloi International Airport, Guwahati",
+        distance: "22 km",
+        estimatedTime: "45-60 minutes by taxi",
+        terminals: ["Terminal 1"],
+        taxiApproximate: "₹600-900"
+      },
+      localTransport: [
+        { type: "Auto Rickshaw", from: "Temple Area", distance: "3 km", cost: "₹50-80" },
+        { type: "Taxi/Uber", from: "Railway Station", distance: "8 km", cost: "₹200-300" },
+        { type: "Metro", from: "Guwahati Metro", distance: "2 km", cost: "₹10-20" },
+        { type: "Car Rental", availability: "At city center", cost: "₹800-1200/day" }
+      ],
+      recommendedRoute: {
+        title: "Best Option: Flights/Train to Guwahati + Local Metro/Bus",
+        description: "Fly or train to Guwahati, then use metro or local buses. Very convenient and quick.",
+        advantages: [
+          "Excellent railway and air connectivity",
+          "Metro available for quick access",
+          "Close to city center",
+          "Multiple transport options"
+        ],
+        totalEstimatedTime: "45 minutes - 1 hour",
+        totalCost: "₹200-400 (train) + ₹50-80 (auto) or ₹600-900 (taxi from airport)"
+      }
+    }
   },
   {
     id: 10,
@@ -392,7 +588,56 @@ export const templesData = [
       email: "kaalbhairav@ujjain.in"
     },
     image: "photos/kbt.jpg",
-    galleryPhotoPrefix: "kbt"
+    galleryPhotoPrefix: "kbt",
+    transport: {
+      bus: {
+        nearestBusStop: "Ujjain Bus Stop",
+        busStopDistance: "1 km",
+        majorRoutes: [
+          { number: "101", operatedBy: "Madhya Pradesh Roadways", frequency: "Every 20 mins" },
+          { number: "102", operatedBy: "Madhya Pradesh Roadways", frequency: "Every 30 mins" },
+          { number: "Private", operatedBy: "Private Transport", frequency: "Every 45 mins" }
+        ],
+        busStandDistance: "3 km",
+        estimatedBusTime: "8-15 minutes"
+      },
+      railway: {
+        nearestStation: "Ujjain Railway Station",
+        distance: "8 km",
+        estimatedTime: "15-20 minutes by auto",
+        majorTrains: [
+          { name: "Ujjayini Express", from: "Delhi", to: "Ujjain", stopTime: "07:00" },
+          { name: "Shatabdi Express", from: "Delhi", to: "Indore", stopTime: "16:00" },
+          { name: "Awantika Express", from: "Mumbai", to: "Indore", stopTime: "13:30" }
+        ],
+        ticketApproximately: "₹150-250"
+      },
+      airport: {
+        nearestAirport: "Indore International Airport",
+        distance: "55 km",
+        estimatedTime: "1.5 hours by taxi",
+        terminals: ["Main Terminal"],
+        taxiApproximate: "₹900-1200"
+      },
+      localTransport: [
+        { type: "Auto Rickshaw", from: "Temple Area", distance: "3 km", cost: "₹50-80" },
+        { type: "Taxi/Uber", from: "Indore Airport", distance: "55 km", cost: "₹900-1200" },
+        { type: "Bike Rental", availability: "Available in town", cost: "₹150-250/day" },
+        { type: "Car Rental", availability: "At Ujjain", cost: "₹800-1200/day" }
+      ],
+      recommendedRoute: {
+        title: "Best Option: Train to Ujjain + Auto Rickshaw",
+        description: "Direct train from major cities to Ujjain, then auto to temple. Very convenient.",
+        advantages: [
+          "Excellent railway connectivity",
+          "Affordable local transport",
+          "Famous pilgrimage destination with frequent trains",
+          "Ujjain Mahakal temple nearby makes it a pilgrimage circuit"
+        ],
+        totalEstimatedTime: "1.5-2 hours",
+        totalCost: "₹150-250 (train) + ₹50-80 (auto)"
+      }
+    }
   },
   {
     id: 11,
@@ -407,7 +652,56 @@ export const templesData = [
       phone: "+91 98765 10002",
       email: "dandeshwar@temple.org"
     },
-    image: "photos/dt.jpeg"
+    image: "photos/dt.jpeg",
+    transport: {
+      bus: {
+        nearestBusStop: "Dandeshwar Temple Bus Stop",
+        busStopDistance: "1 km",
+        majorRoutes: [
+          { number: "201", operatedBy: "Tamil Nadu State Transport", frequency: "Every 30 mins" },
+          { number: "202", operatedBy: "Tamil Nadu State Transport", frequency: "Every 45 mins" },
+          { number: "Private", operatedBy: "Private Transport", frequency: "Every 60 mins" }
+        ],
+        busStandDistance: "15 km",
+        estimatedBusTime: "30-45 minutes"
+      },
+      railway: {
+        nearestStation: "Tiruppur Railway Station",
+        distance: "18 km",
+        estimatedTime: "40-50 minutes by taxi",
+        majorTrains: [
+          { name: "Coromandel Express", from: "Delhi", to: "Chennai", stopTime: "14:35" },
+          { name: "Chennai Express", from: "Mumbai", to: "Chennai", stopTime: "15:00" },
+          { name: "Nilgiri Express", from: "Chennai", to: "Ooty", stopTime: "07:30" }
+        ],
+        ticketApproximately: "₹100-200"
+      },
+      airport: {
+        nearestAirport: "Coimbatore International Airport",
+        distance: "45 km",
+        estimatedTime: "1.5 hours by taxi",
+        terminals: ["Main Terminal"],
+        taxiApproximate: "₹700-1000"
+      },
+      localTransport: [
+        { type: "Auto Rickshaw", from: "Temple Area", distance: "15 km", cost: "₹200-250" },
+        { type: "Taxi/Uber", from: "Coimbatore Airport", distance: "45 km", cost: "₹700-1000" },
+        { type: "Shared Jeep", from: "Bus Stand", distance: "15 km", cost: "₹80-120" },
+        { type: "Car Rental", availability: "At Tiruppur", cost: "₹800-1200/day" }
+      ],
+      recommendedRoute: {
+        title: "Best Option: Flight to Coimbatore + Taxi or Bus",
+        description: "Fly to Coimbatore, then taxi or bus to temple. Quick access from airport.",
+        advantages: [
+          "Good flight connectivity from major cities",
+          "Well-connected by road network",
+          "Multiple transport options available",
+          "Scenic Tamil Nadu route"
+        ],
+        totalEstimatedTime: "2-3 hours",
+        totalCost: "₹700-1000 (taxi from airport) or ₹100-200 (train) + ₹200-250 (auto)"
+      }
+    }
   },
   {
     id: 12,
@@ -422,7 +716,56 @@ export const templesData = [
       phone: "+91 98765 10003",
       email: "bateshwar@gwalior.org"
     },
-    image: "photos/btc.jpg"
+    image: "photos/btc.jpg",
+    transport: {
+      bus: {
+        nearestBusStop: "Bateshwar Bus Stop",
+        busStopDistance: "2 km",
+        majorRoutes: [
+          { number: "51", operatedBy: "Madhya Pradesh Roadways", frequency: "Every 30 mins" },
+          { number: "52", operatedBy: "Madhya Pradesh Roadways", frequency: "Every 45 mins" },
+          { number: "Private", operatedBy: "Private Transport", frequency: "Every 60 mins" }
+        ],
+        busStandDistance: "8 km",
+        estimatedBusTime: "15-25 minutes"
+      },
+      railway: {
+        nearestStation: "Gwalior Railway Station",
+        distance: "25 km",
+        estimatedTime: "40-50 minutes by taxi",
+        majorTrains: [
+          { name: "Shatabdi Express", from: "Delhi", to: "Gwalior", stopTime: "08:30" },
+          { name: "Tamil Nadu Express", from: "Delhi", to: "Chennai", stopTime: "16:40" },
+          { name: "Taj Express", from: "Agra", to: "Delhi", stopTime: "12:15" }
+        ],
+        ticketApproximately: "₹100-200"
+      },
+      airport: {
+        nearestAirport: "Gwalior Airport",
+        distance: "15 km",
+        estimatedTime: "30-40 minutes by taxi",
+        terminals: ["Main Terminal"],
+        taxiApproximate: "₹300-500"
+      },
+      localTransport: [
+        { type: "Auto Rickshaw", from: "Temple Area", distance: "8 km", cost: "₹80-120" },
+        { type: "Taxi/Uber", from: "Gwalior Station", distance: "25 km", cost: "₹400-600" },
+        { type: "Bike Rental", availability: "Available in town", cost: "₹200-300/day" },
+        { type: "Car Rental", availability: "At Gwalior", cost: "₹900-1300/day" }
+      ],
+      recommendedRoute: {
+        title: "Best Option: Train to Gwalior + Taxi",
+        description: "Take train to Gwalior, then taxi to Bateshwar temple complex. Direct and economical.",
+        advantages: [
+          "Excellent train connectivity from Delhi/Agra",
+          "Close to Gwalior city",
+          "Affordable local transport",
+          "Can combine with Gwalior Fort visit"
+        ],
+        totalEstimatedTime: "2-3 hours",
+        totalCost: "₹100-200 (train) + ₹80-120 (auto)"
+      }
+    }
   },
   {
     id: 13,
@@ -437,7 +780,56 @@ export const templesData = [
       phone: "+91 98765 10004",
       email: "mehdiana@gurdwara.org"
     },
-    image: "photos/GMS.jpg"
+    image: "photos/GMS.jpg",
+    transport: {
+      bus: {
+        nearestBusStop: "Mehdiana Gurdwara Bus Stop",
+        busStopDistance: "1 km",
+        majorRoutes: [
+          { number: "502", operatedBy: "Punjab State Transport", frequency: "Every 20 mins" },
+          { number: "503", operatedBy: "Punjab State Transport", frequency: "Every 30 mins" },
+          { number: "Private", operatedBy: "Private Transport", frequency: "Every 45 mins" }
+        ],
+        busStandDistance: "5 km",
+        estimatedBusTime: "10-15 minutes"
+      },
+      railway: {
+        nearestStation: "Jagraon Railway Station",
+        distance: "3 km",
+        estimatedTime: "8-12 minutes by auto",
+        majorTrains: [
+          { name: "Punjab Mail", from: "Delhi", to: "Amritsar", stopTime: "14:20" },
+          { name: "Malwa Express", from: "Delhi", to: "Bathinda", stopTime: "20:35" },
+          { name: "Shatabdi Express", from: "Delhi", to: "Amritsar", stopTime: "08:00" }
+        ],
+        ticketApproximately: "₹80-150"
+      },
+      airport: {
+        nearestAirport: "Chandigarh International Airport",
+        distance: "80 km",
+        estimatedTime: "2 hours by taxi",
+        terminals: ["Main Terminal"],
+        taxiApproximate: "₹1000-1300"
+      },
+      localTransport: [
+        { type: "Auto Rickshaw", from: "Station", distance: "3 km", cost: "₹30-50" },
+        { type: "Taxi/Uber", from: "Ludhiana City", distance: "15 km", cost: "₹250-350" },
+        { type: "Bike Rental", availability: "Available in town", cost: "₹150-200/day" },
+        { type: "Car Rental", availability: "At Ludhiana", cost: "₹800-1200/day" }
+      ],
+      recommendedRoute: {
+        title: "Best Option: Train to Jagraon + Auto Rickshaw",
+        description: "Direct train from Delhi/Amritsar to Jagraon, then auto to Gurdwara. Very convenient.",
+        advantages: [
+          "Excellent railway connectivity from North India",
+          "Very close to railway station",
+          "Affordable auto transport",
+          "Frequent pilgrims make it easy to find shared transport"
+        ],
+        totalEstimatedTime: "1-2 hours",
+        totalCost: "₹80-150 (train) + ₹30-50 (auto)"
+      }
+    }
   },
   {
     id: 14,
@@ -452,7 +844,56 @@ export const templesData = [
       phone: "+91 98765 10005",
       email: "bhatha@gurdwara.org"
     },
-    image: "photos/Gbs.jpg"
+    image: "photos/Gbs.jpg",
+    transport: {
+      bus: {
+        nearestBusStop: "Bhatha Sahib Bus Stop",
+        busStopDistance: "2 km",
+        majorRoutes: [
+          { number: "301", operatedBy: "Punjab State Transport", frequency: "Every 25 mins" },
+          { number: "302", operatedBy: "Punjab State Transport", frequency: "Every 40 mins" },
+          { number: "Private", operatedBy: "Private Transport", frequency: "Every 60 mins" }
+        ],
+        busStandDistance: "8 km",
+        estimatedBusTime: "15-25 minutes"
+      },
+      railway: {
+        nearestStation: "Rupnagar Railway Station",
+        distance: "12 km",
+        estimatedTime: "25-35 minutes by taxi",
+        majorTrains: [
+          { name: "Shatabdi Express", from: "Delhi", to: "Amritsar", stopTime: "08:00" },
+          { name: "Punjab Mail", from: "Delhi", to: "Amritsar", stopTime: "14:20" },
+          { name: "Local Trains", from: "Chandigarh", to: "Nangal Dam", stopTime: "06:00" }
+        ],
+        ticketApproximately: "₹100-150"
+      },
+      airport: {
+        nearestAirport: "Chandigarh International Airport",
+        distance: "40 km",
+        estimatedTime: "1 hour by taxi",
+        terminals: ["Main Terminal"],
+        taxiApproximate: "₹600-800"
+      },
+      localTransport: [
+        { type: "Auto Rickshaw", from: "Station", distance: "12 km", cost: "₹100-150" },
+        { type: "Taxi/Uber", from: "Chandigarh Airport", distance: "40 km", cost: "₹600-800" },
+        { type: "Bike Rental", availability: "Available in town", cost: "₹150-200/day" },
+        { type: "Car Rental", availability: "At Rupnagar/Chandigarh", cost: "₹800-1200/day" }
+      ],
+      recommendedRoute: {
+        title: "Best Option: Train to Rupnagar + Taxi",
+        description: "Train to Rupnagar, then taxi to Gurdwara. Close to Chandigarh.",
+        advantages: [
+          "Good railway connectivity from Delhi",
+          "Close to Chandigarh city",
+          "Affordable local transport",
+          "Beautiful Sutlej River area"
+        ],
+        totalEstimatedTime: "2-3 hours",
+        totalCost: "₹100-150 (train) + ₹100-150 (auto)"
+      }
+    }
   },
   {
     id: 15,
@@ -467,7 +908,56 @@ export const templesData = [
       phone: "+91 98765 10006",
       email: "yahiyaganj@gurdwara.org"
     },
-    image: "photos/GY.jpeg"
+    image: "photos/GY.jpeg",
+    transport: {
+      bus: {
+        nearestBusStop: "Yahiyaganj Bus Stop",
+        busStopDistance: "1 km",
+        majorRoutes: [
+          { number: "15", operatedBy: "Lucknow Transport", frequency: "Every 15 mins" },
+          { number: "21", operatedBy: "Lucknow Transport", frequency: "Every 20 mins" },
+          { number: "Private", operatedBy: "Private Transport", frequency: "Every 30 mins" }
+        ],
+        busStandDistance: "3 km",
+        estimatedBusTime: "8-12 minutes"
+      },
+      railway: {
+        nearestStation: "Lucknow Central Railway Station",
+        distance: "8 km",
+        estimatedTime: "20-30 minutes by taxi",
+        majorTrains: [
+          { name: "Shatabdi Express", from: "Delhi", to: "Lucknow", stopTime: "14:40" },
+          { name: "Rajdhani Express", from: "Delhi", to: "Kolkata", stopTime: "21:00" },
+          { name: "Gomti Express", from: "Kolkata", to: "Lucknow", stopTime: "09:35" }
+        ],
+        ticketApproximately: "₹200-350"
+      },
+      airport: {
+        nearestAirport: "Lucknow Amausi Airport",
+        distance: "15 km",
+        estimatedTime: "30-45 minutes by taxi",
+        terminals: ["Main Terminal"],
+        taxiApproximate: "₹400-600"
+      },
+      localTransport: [
+        { type: "Auto Rickshaw", from: "City Center", distance: "3 km", cost: "₹40-60" },
+        { type: "Taxi/Uber", from: "Airport", distance: "15 km", cost: "₹400-600" },
+        { type: "Bus", from: "City Center", distance: "3 km", cost: "₹10-15" },
+        { type: "Car Rental", availability: "At city center", cost: "₹800-1200/day" }
+      ],
+      recommendedRoute: {
+        title: "Best Option: Flight/Train to Lucknow + Local Transport",
+        description: "Fly or train to Lucknow, then use local buses or taxi. Centrally located.",
+        advantages: [
+          "Flight and train connectivity from major cities",
+          "Located in city center",
+          "Excellent local transport network",
+          "Near Bara Imambara and other heritage sites"
+        ],
+        totalEstimatedTime: "1-1.5 hours",
+        totalCost: "₹200-350 (train) + ₹40-60 (auto) or ₹400-600 (taxi from airport)"
+      }
+    }
   },
   {
     id: 16,
@@ -482,7 +972,56 @@ export const templesData = [
       phone: "+91 98765 10007",
       email: "dhubri@gurdwara.org"
     },
-    image: "photos/gsgtbs.jpg"
+    image: "photos/gsgtbs.jpg",
+    transport: {
+      bus: {
+        nearestBusStop: "Dhubri Bus Stand",
+        busStopDistance: "2 km",
+        majorRoutes: [
+          { number: "5", operatedBy: "Assam State Transport", frequency: "Every 40 mins" },
+          { number: "8", operatedBy: "Assam State Transport", frequency: "Every 60 mins" },
+          { number: "Private", operatedBy: "Private Transport", frequency: "Every 90 mins" }
+        ],
+        busStandDistance: "2 km",
+        estimatedBusTime: "5-10 minutes"
+      },
+      railway: {
+        nearestStation: "Dhubri Railway Station",
+        distance: "3 km",
+        estimatedTime: "8-12 minutes by auto",
+        majorTrains: [
+          { name: "Northeast Express", from: "Kolkata", to: "Guwahati", stopTime: "18:45" },
+          { name: "Brahmaputra Express", from: "Delhi", to: "Guwahati", stopTime: "06:15" },
+          { name: "Local Trains", from: "New Jalpaiguri", to: "Guwahati", stopTime: "10:00" }
+        ],
+        ticketApproximately: "₹150-250"
+      },
+      airport: {
+        nearestAirport: "Lokpriya Gopinath Bordoloi International Airport, Guwahati",
+        distance: "230 km",
+        estimatedTime: "5-6 hours by taxi",
+        terminals: ["Main Terminal"],
+        taxiApproximate: "₹2000-2500"
+      },
+      localTransport: [
+        { type: "Auto Rickshaw", from: "Bus Stand", distance: "2 km", cost: "₹30-50" },
+        { type: "Taxi/Uber", from: "Guwahati", distance: "230 km", cost: "₹2000-2500" },
+        { type: "Shared Jeep", from: "Bus Stand", distance: "2 km", cost: "₹20-30" },
+        { type: "Car Rental", availability: "At Dhubri", cost: "₹1000-1500/day" }
+      ],
+      recommendedRoute: {
+        title: "Best Option: Train to Dhubri + Auto Rickshaw",
+        description: "Direct train to Dhubri station. Gurdwara is very close to station.",
+        advantages: [
+          "Train station right next to Gurdwara",
+          "Affordable auto transport",
+          "Good railway connectivity from Northeast India",
+          "Beautiful location on Brahmaputra river"
+        ],
+        totalEstimatedTime: "1-2 hours",
+        totalCost: "₹150-250 (train) + ₹30-50 (auto)"
+      }
+    }
   },
   {
     id: 17,
@@ -497,7 +1036,56 @@ export const templesData = [
       phone: "+91 98765 10008",
       email: "mumbai@gurdwara.org"
     },
-    image: "photos/GADGN.jpg"
+    image: "photos/GADGN.jpg",
+    transport: {
+      bus: {
+        nearestBusStop: "Akali Dal Gurdwara Bus Stop",
+        busStopDistance: "0.5 km",
+        majorRoutes: [
+          { number: "200", operatedBy: "Mumbai Transport", frequency: "Every 10 mins" },
+          { number: "201", operatedBy: "Mumbai Transport", frequency: "Every 15 mins" },
+          { number: "Private", operatedBy: "Private Transport", frequency: "Every 20 mins" }
+        ],
+        busStandDistance: "2 km",
+        estimatedBusTime: "5-10 minutes"
+      },
+      railway: {
+        nearestStation: "Mumbai Central Railway Station",
+        distance: "12 km",
+        estimatedTime: "30-40 minutes by metro",
+        majorTrains: [
+          { name: "Rajdhani Express", from: "Delhi", to: "Mumbai", stopTime: "07:20" },
+          { name: "Shatabdi Express", from: "Delhi", to: "Mumbai", stopTime: "16:00" },
+          { name: "Western Railways", from: "Various Cities", to: "Mumbai", stopTime: "Varies" }
+        ],
+        ticketApproximately: "₹300-600"
+      },
+      airport: {
+        nearestAirport: "Indira Gandhi International Airport/Mumbai International Airport",
+        distance: "15 km",
+        estimatedTime: "45 minutes by taxi",
+        terminals: ["Multiple Terminals"],
+        taxiApproximate: "₹500-800"
+      },
+      localTransport: [
+        { type: "Auto Rickshaw", from: "City Center", distance: "5 km", cost: "₹60-100" },
+        { type: "Taxi/Uber", from: "Airport", distance: "15 km", cost: "₹500-800" },
+        { type: "Metro", from: "Mumbai Metro", distance: "2 km", cost: "₹10-20" },
+        { type: "Bus", from: "City Center", distance: "5 km", cost: "₹10-15" }
+      ],
+      recommendedRoute: {
+        title: "Best Option: Flight/Train to Mumbai + Metro/Taxi",
+        description: "Fly to Mumbai, use metro or taxi. Very convenient metro access in Mumbai.",
+        advantages: [
+          "Excellent flight and train connectivity",
+          "Located in central Mumbai",
+          "Metro and bus network available",
+          "Multiple accommodation options nearby"
+        ],
+        totalEstimatedTime: "45 minutes - 1 hour",
+        totalCost: "₹300-600 (train) + ₹60-100 (auto) or ₹500-800 (taxi from airport)"
+      }
+    }
   },
   {
     id: 18,
@@ -512,7 +1100,56 @@ export const templesData = [
       phone: "+91 98765 10009",
       email: "jamalikamali@heritage.in"
     },
-    image: "photos/jkm.jpg"
+    image: "photos/jkm.jpg",
+    transport: {
+      bus: {
+        nearestBusStop: "Mehrauli Bus Stop",
+        busStopDistance: "1 km",
+        majorRoutes: [
+          { number: "505", operatedBy: "Delhi Transport", frequency: "Every 15 mins" },
+          { number: "506", operatedBy: "Delhi Transport", frequency: "Every 20 mins" },
+          { number: "Private", operatedBy: "Private Transport", frequency: "Every 30 mins" }
+        ],
+        busStandDistance: "2 km",
+        estimatedBusTime: "5-10 minutes"
+      },
+      railway: {
+        nearestStation: "Delhi Central Railway Station / New Delhi Station",
+        distance: "20 km",
+        estimatedTime: "45-60 minutes by metro",
+        majorTrains: [
+          { name: "Rajdhani Express", from: "Delhi", to: "Mumbai", stopTime: "07:20" },
+          { name: "Shatabdi Express", from: "Delhi", to: "Agra", stopTime: "08:00" },
+          { name: "Multiple Trains", from: "All Major Cities", to: "Delhi", stopTime: "Varies" }
+        ],
+        ticketApproximately: "₹10-20 (Metro)"
+      },
+      airport: {
+        nearestAirport: "Indira Gandhi International Airport, Delhi",
+        distance: "25 km",
+        estimatedTime: "45 minutes by taxi",
+        terminals: ["Terminal 1", "Terminal 2", "Terminal 3"],
+        taxiApproximate: "₹400-600"
+      },
+      localTransport: [
+        { type: "Auto Rickshaw", from: "Mehrauli", distance: "1 km", cost: "₹30-50" },
+        { type: "Taxi/Uber", from: "Airport", distance: "25 km", cost: "₹400-600" },
+        { type: "Metro", from: "Delhi Metro", distance: "5 km", cost: "₹10-20" },
+        { type: "Car Rental", availability: "At airport/city", cost: "₹800-1200/day" }
+      ],
+      recommendedRoute: {
+        title: "Best Option: Flight to Delhi + Metro/Taxi",
+        description: "Fly to Delhi, then use metro or taxi to Mehrauli. Very convenient.",
+        advantages: [
+          "Excellent flight connectivity from all major cities",
+          "Good metro and road connectivity",
+          "Historical monument in UNESCO protected area",
+          "Walking distance to other Mehrauli monuments"
+        ],
+        totalEstimatedTime: "1.5-2 hours",
+        totalCost: "₹10-20 (metro) + ₹30-50 (auto) or ₹400-600 (taxi from airport)"
+      }
+    }
   },
   {
     id: 19,
@@ -527,7 +1164,56 @@ export const templesData = [
       phone: "+91 98765 10010",
       email: "yellowmosque@murshidabad.org"
     },
-    image: "photos/ym.jpg"
+    image: "photos/ym.jpg",
+    transport: {
+      bus: {
+        nearestBusStop: "Murshidabad Bus Stand",
+        busStopDistance: "1 km",
+        majorRoutes: [
+          { number: "5", operatedBy: "West Bengal Transport", frequency: "Every 30 mins" },
+          { number: "8", operatedBy: "West Bengal Transport", frequency: "Every 45 mins" },
+          { number: "Private", operatedBy: "Private Transport", frequency: "Every 60 mins" }
+        ],
+        busStandDistance: "1 km",
+        estimatedBusTime: "5-10 minutes"
+      },
+      railway: {
+        nearestStation: "Murshidabad Railway Station",
+        distance: "5 km",
+        estimatedTime: "12-18 minutes by auto",
+        majorTrains: [
+          { name: "Howrah-Delhi Express", from: "Kolkata", to: "Delhi", stopTime: "06:00" },
+          { name: "Sealdah-Malda Line", from: "Kolkata", to: "Malda", stopTime: "06:30" },
+          { name: "Local Trains", from: "Kolkata", to: "Murshidabad", stopTime: "Varies" }
+        ],
+        ticketApproximately: "₹80-150"
+      },
+      airport: {
+        nearestAirport: "Netaji Subhas Chandra Bose International Airport, Kolkata",
+        distance: "90 km",
+        estimatedTime: "2-2.5 hours by taxi",
+        terminals: ["Main Terminal"],
+        taxiApproximate: "₹900-1200"
+      },
+      localTransport: [
+        { type: "Auto Rickshaw", from: "Bus Stand", distance: "1 km", cost: "₹25-40" },
+        { type: "Taxi/Uber", from: "Kolkata Airport", distance: "90 km", cost: "₹900-1200" },
+        { type: "Shared Jeep", from: "Bus Stand", distance: "5 km", cost: "₹50-80" },
+        { type: "Car Rental", availability: "At Murshidabad", cost: "₹800-1200/day" }
+      ],
+      recommendedRoute: {
+        title: "Best Option: Train from Kolkata + Auto Rickshaw",
+        description: "Train from Kolkata to Murshidabad, then auto to mosque. Most budget-friendly.",
+        advantages: [
+          "Good railway connectivity from Kolkata",
+          "Affordable train tickets",
+          "Historic city with multiple monuments",
+          "Stay options available in Murshidabad"
+        ],
+        totalEstimatedTime: "2-3 hours",
+        totalCost: "₹80-150 (train) + ₹25-40 (auto)"
+      }
+    }
   },
   {
     id: 20,
@@ -542,7 +1228,51 @@ export const templesData = [
       phone: "+91 98765 10011",
       email: "mohidden@lakshadweep.org"
     },
-    image: "photos/mm.jpeg"
+    image: "photos/mm.jpeg",
+    transport: {
+      bus: {
+        nearestBusStop: "Kavaratti Island",
+        busStopDistance: "0.5 km",
+        majorRoutes: [
+          { number: "Local Shuttle", operatedBy: "Island Transport", frequency: "Every 30 mins" },
+          { number: "Shared Jeep", operatedBy: "Private Transport", frequency: "Every 45 mins" }
+        ],
+        busStandDistance: "0.5 km",
+        estimatedBusTime: "5 minutes"
+      },
+      railway: {
+        nearestStation: "No Railway - Island Location",
+        distance: "N/A",
+        estimatedTime: "N/A",
+        majorTrains: [],
+        ticketApproximately: "N/A"
+      },
+      airport: {
+        nearestAirport: "Agatti Airport, Lakshadweep",
+        distance: "90 km",
+        estimatedTime: "4-5 hours by ferry/speedboat",
+        terminals: ["Main Terminal"],
+        taxiApproximate: "N/A"
+      },
+      localTransport: [
+        { type: "Ferry/Boat", from: "Agatti Island", distance: "90 km", cost: "₹150-300" },
+        { type: "Speedboat", from: "Agatti Island", distance: "90 km", cost: "₹500-700" },
+        { type: "Shared Jeep", from: "Island Center", distance: "0.5 km", cost: "₹20-30" },
+        { type: "Walk", from: "Island Center", distance: "0.5 km", cost: "Free" }
+      ],
+      recommendedRoute: {
+        title: "Best Option: Flight to Agatti + Ferry to Kavaratti",
+        description: "Fly to Agatti, then ferry or speedboat to Kavaratti island.",
+        advantages: [
+          "Island destination with unique charm",
+          "Regular ferry services available",
+          "Pristine island environment",
+          "Direct flights from major cities to Agatti"
+        ],
+        totalEstimatedTime: "8-10 hours",
+        totalCost: "₹2000-3000 (flight) + ₹150-700 (ferry/speedboat)"
+      }
+    }
   },
   {
     id: 21,
@@ -557,7 +1287,56 @@ export const templesData = [
       phone: "+91 98765 10012",
       email: "najibabad@mosque.org"
     },
-    image: "photos/nm.jpg"
+    image: "photos/nm.jpg",
+    transport: {
+      bus: {
+        nearestBusStop: "Najibabad Bus Stand",
+        busStopDistance: "1 km",
+        majorRoutes: [
+          { number: "101", operatedBy: "Uttar Pradesh Roadways", frequency: "Every 20 mins" },
+          { number: "102", operatedBy: "Uttar Pradesh Roadways", frequency: "Every 30 mins" },
+          { number: "Private", operatedBy: "Private Transport", frequency: "Every 45 mins" }
+        ],
+        busStandDistance: "1 km",
+        estimatedBusTime: "5-10 minutes"
+      },
+      railway: {
+        nearestStation: "Najibabad Railway Station",
+        distance: "2 km",
+        estimatedTime: "5-8 minutes by auto",
+        majorTrains: [
+          { name: "Delhi-Meerut Line", from: "Delhi", to: "Meerut", stopTime: "Various" },
+          { name: "Local Trains", from: "Delhi", to: "Najibabad", stopTime: "Various" },
+          { name: "Express Trains", from: "Delhi", to: "Saharanpur", stopTime: "Various" }
+        ],
+        ticketApproximately: "₹50-100"
+      },
+      airport: {
+        nearestAirport: "Indira Gandhi International Airport, Delhi",
+        distance: "100 km",
+        estimatedTime: "2-2.5 hours by taxi",
+        terminals: ["Terminal 1", "Terminal 2", "Terminal 3"],
+        taxiApproximate: "₹1000-1400"
+      },
+      localTransport: [
+        { type: "Auto Rickshaw", from: "Bus Stand", distance: "1 km", cost: "₹20-30" },
+        { type: "Taxi/Uber", from: "Delhi Airport", distance: "100 km", cost: "₹1000-1400" },
+        { type: "Local Buses", from: "Bus Stand", distance: "1 km", cost: "₹5-10" },
+        { type: "Car Rental", availability: "At Najibabad", cost: "₹800-1200/day" }
+      ],
+      recommendedRoute: {
+        title: "Best Option: Train from Delhi + Auto Rickshaw",
+        description: "Local train from Delhi to Najibabad, then short auto ride to mosque.",
+        advantages: [
+          "Close to Delhi (100 km)",
+          "Good railway connectivity",
+          "Affordable transportation",
+          "Historic Islamic architecture"
+        ],
+        totalEstimatedTime: "2-3 hours",
+        totalCost: "₹50-100 (train) + ₹20-30 (auto)"
+      }
+    }
   },
   {
     id: 22,
@@ -572,7 +1351,56 @@ export const templesData = [
       phone: "+91-5948-241525 +91-5948-241244",
       email: "gpc@nanakmattasahib.com"
     },
-    image: "photos/nmg.jpg"
+    image: "photos/nmg.jpg",
+    transport: {
+      bus: {
+        nearestBusStop: "Nanakmatta Bus Stop",
+        busStopDistance: "1 km",
+        majorRoutes: [
+          { number: "12", operatedBy: "Uttarakhand Transport", frequency: "Every 30 mins" },
+          { number: "15", operatedBy: "Uttarakhand Transport", frequency: "Every 45 mins" },
+          { number: "Private", operatedBy: "Private Transport", frequency: "Every 60 mins" }
+        ],
+        busStandDistance: "3 km",
+        estimatedBusTime: "8-15 minutes"
+      },
+      railway: {
+        nearestStation: "Khatima Railway Station / Nanakmatta Railway Station",
+        distance: "8 km",
+        estimatedTime: "20-30 minutes by auto",
+        majorTrains: [
+          { name: "Shatabdi Express", from: "Delhi", to: "Kathgodam", stopTime: "11:40" },
+          { name: "Ranikhet Express", from: "Delhi", to: "Kathgodam", stopTime: "14:30" },
+          { name: "Local Trains", from: "Delhi", to: "Khatima", stopTime: "Various" }
+        ],
+        ticketApproximately: "₹100-200"
+      },
+      airport: {
+        nearestAirport: "Pantnagar Airport, Uttarakhand",
+        distance: "65 km",
+        estimatedTime: "1.5-2 hours by taxi",
+        terminals: ["Main Terminal"],
+        taxiApproximate: "₹800-1200"
+      },
+      localTransport: [
+        { type: "Auto Rickshaw", from: "Bus Stop", distance: "1 km", cost: "₹30-50" },
+        { type: "Taxi/Uber", from: "Pantnagar Airport", distance: "65 km", cost: "₹800-1200" },
+        { type: "Shared Jeep", from: "Bus Stand", distance: "3 km", cost: "₹50-80" },
+        { type: "Car Rental", availability: "At Nanakmatta", cost: "₹900-1300/day" }
+      ],
+      recommendedRoute: {
+        title: "Best Option: Train to Khatima/Nanakmatta + Auto Rickshaw",
+        description: "Train to Khatima or Nanakmatta station, then short auto to Gurudwara.",
+        advantages: [
+          "Good railway connectivity from Delhi",
+          "Scenic location near Nanak Sagar reservoir",
+          "Gurdwara has good accommodation facilities",
+          "Affordable local transport"
+        ],
+        totalEstimatedTime: "2-3 hours",
+        totalCost: "₹100-200 (train) + ₹30-50 (auto)"
+      }
+    }
   },
   {
     id: 23,
@@ -588,7 +1416,56 @@ export const templesData = [
       email: "jaintirthtourism@gmail.com "
     },
     image: "photos/hp8.jpg",
-    galleryPhotoPrefix: "hp"
+    galleryPhotoPrefix: "hp",
+    transport: {
+      bus: {
+        nearestBusStop: "Hastinapur Bus Stand",
+        busStopDistance: "2 km",
+        majorRoutes: [
+          { number: "50", operatedBy: "Uttar Pradesh Roadways", frequency: "Every 20 mins" },
+          { number: "51", operatedBy: "Uttar Pradesh Roadways", frequency: "Every 30 mins" },
+          { number: "Private", operatedBy: "Private Transport", frequency: "Every 45 mins" }
+        ],
+        busStandDistance: "2 km",
+        estimatedBusTime: "5-10 minutes"
+      },
+      railway: {
+        nearestStation: "Hastinapur Railway Station",
+        distance: "3 km",
+        estimatedTime: "8-12 minutes by auto",
+        majorTrains: [
+          { name: "Shatabdi Express", from: "Delhi", to: "Ghaziabad", stopTime: "08:20" },
+          { name: "Local Trains", from: "Delhi", to: "Meerut", stopTime: "Various" },
+          { name: "Intercity Trains", from: "Delhi", to: "Hastinapur", stopTime: "Various" }
+        ],
+        ticketApproximately: "₹40-80"
+      },
+      airport: {
+        nearestAirport: "Indira Gandhi International Airport, Delhi",
+        distance: "100 km",
+        estimatedTime: "2-2.5 hours by taxi",
+        terminals: ["Terminal 1", "Terminal 2", "Terminal 3"],
+        taxiApproximate: "₹1000-1400"
+      },
+      localTransport: [
+        { type: "Auto Rickshaw", from: "Station", distance: "3 km", cost: "₹40-60" },
+        { type: "Taxi/Uber", from: "Delhi Airport", distance: "100 km", cost: "₹1000-1400" },
+        { type: "Shared Jeep", from: "Bus Stand", distance: "2 km", cost: "₹30-50" },
+        { type: "Car Rental", availability: "At Hastinapur", cost: "₹800-1200/day" }
+      ],
+      recommendedRoute: {
+        title: "Best Option: Train from Delhi + Auto Rickshaw",
+        description: "Direct train to Hastinapur from Delhi, then short auto ride to temple.",
+        advantages: [
+          "Close to Delhi (100 km)",
+          "Direct train connectivity",
+          "Important Jain pilgrimage site",
+          "Affordable transportation"
+        ],
+        totalEstimatedTime: "1.5-2 hours",
+        totalCost: "₹40-80 (train) + ₹40-60 (auto)"
+      }
+    }
   },
   {
     id: 24,
@@ -604,7 +1481,56 @@ export const templesData = [
       email: "kahannagarsonagir@gmail.com "
     },
     image: "photos/sng4.jpg",
-    galleryPhotoPrefix: "sng"
+    galleryPhotoPrefix: "sng",
+    transport: {
+      bus: {
+        nearestBusStop: "Sonagiri Bus Stop",
+        busStopDistance: "1 km",
+        majorRoutes: [
+          { number: "60", operatedBy: "Madhya Pradesh Roadways", frequency: "Every 30 mins" },
+          { number: "61", operatedBy: "Madhya Pradesh Roadways", frequency: "Every 45 mins" },
+          { number: "Private", operatedBy: "Private Transport", frequency: "Every 60 mins" }
+        ],
+        busStandDistance: "8 km",
+        estimatedBusTime: "15-20 minutes"
+      },
+      railway: {
+        nearestStation: "Datia Railway Station",
+        distance: "15 km",
+        estimatedTime: "30-40 minutes by taxi",
+        majorTrains: [
+          { name: "Shatabdi Express", from: "Delhi", to: "Gwalior", stopTime: "08:30" },
+          { name: "Tamil Nadu Express", from: "Delhi", to: "Chennai", stopTime: "16:40" },
+          { name: "Express Trains", from: "Delhi", to: "Datia", stopTime: "Various" }
+        ],
+        ticketApproximately: "₹80-150"
+      },
+      airport: {
+        nearestAirport: "Gwalior Airport",
+        distance: "40 km",
+        estimatedTime: "1.5 hours by taxi",
+        terminals: ["Main Terminal"],
+        taxiApproximate: "₹600-800"
+      },
+      localTransport: [
+        { type: "Auto Rickshaw", from: "Datia Station", distance: "15 km", cost: "₹150-200" },
+        { type: "Taxi/Uber", from: "Gwalior Airport", distance: "40 km", cost: "₹600-800" },
+        { type: "Shared Jeep", from: "Bus Stand", distance: "8 km", cost: "₹80-100" },
+        { type: "Car Rental", availability: "At Datia/Gwalior", cost: "₹900-1300/day" }
+      ],
+      recommendedRoute: {
+        title: "Best Option: Train to Datia + Taxi",
+        description: "Train from Delhi to Datia, then taxi to Sonagiri temple complex.",
+        advantages: [
+          "Good train connectivity from Delhi/Agra",
+          "Major Jain pilgrimage site",
+          "Scenic hill location",
+          "Can combine with Gwalior Fort nearby"
+        ],
+        totalEstimatedTime: "2-3 hours",
+        totalCost: "₹80-150 (train) + ₹150-200 (taxi)"
+      }
+    }
   }
 ];
 

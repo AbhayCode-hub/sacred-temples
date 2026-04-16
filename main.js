@@ -113,6 +113,9 @@ function showTempleDetails(templeId) {
     gallerySection.style.display = 'none';
   }
 
+  // Add "How to Reach" link to navbar when viewing temple details
+  addHowToReachNavLink();
+
   const mapsUrl = `https://www.google.com/maps?q=${temple.coordinates.lat},${temple.coordinates.lng}`;
   const embedMapUrl = `https://maps.google.com/maps?q=${temple.coordinates.lat},${temple.coordinates.lng}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
 
@@ -216,6 +219,9 @@ function showTempleDetails(templeId) {
     if (gallerySection) {
       gallerySection.style.display = 'block';
     }
+
+    // Remove "How to Reach" link from navbar when returning to list
+    removeHowToReachNavLink();
     
     resetHotelDisplay();
   });
@@ -247,6 +253,7 @@ function showTempleDetails(templeId) {
     initializeReviewSection(temple.id, reviewsSection);
   }
 
+  // Add click handlers for temple detail navigation buttons
   // Scroll to top of temple detail section (not to hotels)
   templeDetail.scrollIntoView({ behavior: 'smooth' });
 }
@@ -505,14 +512,28 @@ function setupSmoothScrolling() {
       e.preventDefault();
       const targetId = link.getAttribute('href');
       const templeDetail = document.getElementById('templeDetail');
+      const isViewingTempleDetail = templeDetail && templeDetail.style.display === 'block';
       
       // Special handling when viewing temple details
-      if (templeDetail && templeDetail.style.display === 'block') {
+      if (isViewingTempleDetail) {
+        // If How to Reach link is clicked, scroll to transport section in temple detail
+        if (targetId === '#reach') {
+          const transportSection = document.querySelector('.transport-section');
+          if (transportSection) {
+            const yOffset = -170;
+            const y = transportSection.getBoundingClientRect().top + window.scrollY + yOffset;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+            return;
+          }
+        }
+        
         // If Hotels link is clicked, scroll to nearby hotels in temple detail
         if (targetId === '#hotels') {
           const hotelContainer = document.getElementById('hotelContainer');
           if (hotelContainer) {
-            hotelContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const yOffset = -230;
+            const y = hotelContainer.getBoundingClientRect().top + window.scrollY + yOffset;
+            window.scrollTo({ top: y, behavior: 'smooth' });
             return;
           }
         }
@@ -521,9 +542,24 @@ function setupSmoothScrolling() {
         if (targetId === '#gallery') {
           const templeGalleryGrid = document.getElementById('templeGalleryGrid');
           if (templeGalleryGrid) {
-            templeGalleryGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const yOffset = -220;
+            const y = templeGalleryGrid.getBoundingClientRect().top + window.scrollY + yOffset;
+            window.scrollTo({ top: y, behavior: 'smooth' });
             return;
           }
+        }
+      } else {
+        // Main page navigation - explicit handling
+        if (targetId === '#gallery') {
+          const gallerySection = document.querySelector('.gallery-section');
+          if (gallerySection) {
+            gallerySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            return;
+          }
+        }
+        // How to Reach only works in temple detail view
+        if (targetId === '#reach') {
+          return;
         }
       }
       
@@ -534,6 +570,51 @@ function setupSmoothScrolling() {
       }
     });
   });
+}
+
+/**
+ * Add "How to Reach" link to navbar when viewing temple details
+ */
+function addHowToReachNavLink() {
+  const navMenu = document.querySelector('.nav-menu');
+  if (!navMenu) return;
+  
+  // Check if it already exists
+  if (document.getElementById('howToReachNavLink')) {
+    return;
+  }
+  
+  // Find the position to insert (before Hotels, not before About)
+  const hotelsLink = document.querySelector('a[href="#hotels"]');
+  if (hotelsLink) {
+    const hotelsLi = hotelsLink.parentElement;
+    const newLi = document.createElement('li');
+    newLi.innerHTML = '<a href="#reach" class="nav-link" id="howToReachNavLink">How to Reach</a>';
+    navMenu.insertBefore(newLi, hotelsLi);
+    
+    // Attach click handler to the newly added link
+    const howToReachLink = document.getElementById('howToReachNavLink');
+    howToReachLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      const transportSection = document.querySelector('.transport-section');
+      if (transportSection) {
+        // Scroll with 170px offset for temple detail view
+        const yOffset = -80;
+        const y = transportSection.getBoundingClientRect().top + window.scrollY + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    });
+  }
+}
+
+/**
+ * Remove "How to Reach" link from navbar when returning to main page
+ */
+function removeHowToReachNavLink() {
+  const howToReachLink = document.getElementById('howToReachNavLink');
+  if (howToReachLink) {
+    howToReachLink.parentElement.remove();
+  }
 }
 
 document.addEventListener('DOMContentLoaded', initializeApp);

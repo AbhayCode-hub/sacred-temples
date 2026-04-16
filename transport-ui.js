@@ -10,7 +10,37 @@
  */
 export function createTransportSection(temple) {
   if (!temple.transport) {
-    return ''; // Return empty if no transport data
+    // Return default "How to Reach" section for temples without specific transport data
+    return `
+      <div class="temple-detail-section transport-section">
+        <h3>🚌 How to Reach</h3>
+        <p class="section-intro">Located at coordinates: ${temple.coordinates.lat.toFixed(4)}°N, ${temple.coordinates.lng.toFixed(4)}°E</p>
+        
+        <div class="default-directions">
+          <div class="directions-info">
+            <h4>Get Directions</h4>
+            <p>Use the map location or click below to get turn-by-turn directions using your preferred navigation app.</p>
+          </div>
+          
+          <div class="directions-buttons">
+            <a href="https://www.google.com/maps/search/?api=1&query=${temple.coordinates.lat},${temple.coordinates.lng}" 
+               target="_blank" class="directions-btn google-maps">
+              📍 Google Maps
+            </a>
+            <a href="https://www.google.com/maps/dir//${temple.coordinates.lat},${temple.coordinates.lng}" 
+               target="_blank" class="directions-btn google-directions">
+              🚗 Get Directions
+            </a>
+          </div>
+          
+          <div class="location-details">
+            <p><strong>📍 Location:</strong> ${temple.location}</p>
+            <p><strong>📞 Contact:</strong> ${temple.contact.phone}</p>
+            <p><strong>📧 Email:</strong> ${temple.contact.email}</p>
+          </div>
+        </div>
+      </div>
+    `;
   }
 
   const { transport } = temple;
