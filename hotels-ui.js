@@ -303,8 +303,12 @@ export function showHotelDetails(hotel) {
     hotelFilters.style.display = 'none';
   }
 
-  const mapsUrl = `https://www.google.com/maps/search/${encodeURIComponent(hotel.address)}`;
-  const bookingUrl = hotel.bookingUrl !== '#' ? hotel.bookingUrl : `https://www.google.com/maps/search/hotels+near+${encodeURIComponent(hotel.address)}`;
+  // Generate proper Google Maps URLs with coordinates
+  const mapsUrl = hotel.coordinates 
+    ? `https://www.google.com/maps?q=${hotel.coordinates.lat},${hotel.coordinates.lng}` 
+    : `https://www.google.com/maps/search/${encodeURIComponent(hotel.address)}`;
+  
+  const bookingUrl = `https://www.google.com/maps/search/hotels+near+${hotel.coordinates.lat},${hotel.coordinates.lng}`;
 
   hotelContainer.innerHTML = `
     <button class="hotel-back-btn" id="hotelBackBtn">← Back to Hotels</button>
@@ -335,6 +339,12 @@ export function showHotelDetails(hotel) {
             <strong>Distance</strong>
             <p>${hotel.distance} km away</p>
           </div>
+          ${hotel.coordinates ? `
+            <div class="location-detail-item">
+              <strong>Coordinates</strong>
+              <p>${hotel.coordinates.lat.toFixed(4)}°N, ${hotel.coordinates.lng.toFixed(4)}°E</p>
+            </div>
+          ` : ''}
         </div>
       </div>
 
@@ -361,7 +371,7 @@ export function showHotelDetails(hotel) {
           📍 View Location on Map
         </a>
         <a href="${bookingUrl}" target="_blank" class="hotel-action-btn booking-btn">
-          📅 Book Hotel
+          📅 Find Hotels Nearby
         </a>
       </div>
     </div>

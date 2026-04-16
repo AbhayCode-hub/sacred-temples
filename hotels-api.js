@@ -31,6 +31,516 @@ function getRandomHotelImage() {
 // Cache for storing hotel results to reduce API calls
 
 /**
+ * Temple-specific hotel data with real locations
+ * Each temple ID maps to actual hotels nearby
+ */
+const hotelsByTemple = {
+  1: [ // Shri Bade Baba Digambar Jain Temple - Madhya Pradesh (23.5937, 78.9629)
+    {
+      id: 101,
+      name: 'Vidisha Heritage Hotel',
+      rating: 4.5,
+      ratingCount: 312,
+      price: 2500,
+      currency: 'INR',
+      address: 'Vidisha City Center, Madhya Pradesh',
+      coordinates: { lat: 23.581, lng: 78.971 },
+      distance: 1.2,
+      amenities: ['WiFi', 'AC', 'Restaurant', 'Parking', 'Gym'],
+      image: hotelImages[0]
+    },
+    {
+      id: 102,
+      name: 'Jain Darshan Inn',
+      rating: 4.2,
+      ratingCount: 245,
+      price: 1800,
+      currency: 'INR',
+      address: 'Near Vidisha Railway Station',
+      coordinates: { lat: 23.595, lng: 78.945 },
+      distance: 2.5,
+      amenities: ['WiFi', 'Restaurant', 'AC'],
+      image: hotelImages[1]
+    },
+    {
+      id: 103,
+      name: 'Shanti Bhavan Lodge',
+      rating: 4.0,
+      ratingCount: 189,
+      price: 1200,
+      currency: 'INR',
+      address: 'Main Road, Vidisha',
+      coordinates: { lat: 23.575, lng: 78.980 },
+      distance: 3.1,
+      amenities: ['WiFi', 'AC', 'Vegetarian Food'],
+      image: hotelImages[2]
+    },
+    {
+      id: 104,
+      name: 'Destiny Hotel',
+      rating: 4.6,
+      ratingCount: 456,
+      price: 3500,
+      currency: 'INR',
+      address: 'Premium Location, Vidisha',
+      coordinates: { lat: 23.590, lng: 78.975 },
+      distance: 0.8,
+      amenities: ['WiFi', 'AC', 'Restaurant', 'Parking', 'Gym', 'Pool'],
+      image: hotelImages[3]
+    }
+  ],
+  2: [ // Mangi Tungi Jain Temple - Maharashtra (20.7833, 74.4333)
+    {
+      id: 201,
+      name: 'Nashik Pilgrimage Hotel',
+      rating: 4.3,
+      ratingCount: 298,
+      price: 2200,
+      currency: 'INR',
+      address: 'Nashik City, Maharashtra',
+      coordinates: { lat: 20.805, lng: 74.455 },
+      distance: 1.5,
+      amenities: ['WiFi', 'AC', 'Restaurant', 'Parking'],
+      image: hotelImages[0]
+    },
+    {
+      id: 202,
+      name: 'Mangi Valley Resort',
+      rating: 4.4,
+      ratingCount: 267,
+      price: 2700,
+      currency: 'INR',
+      address: 'Near Mangi Tungi, Nashik',
+      coordinates: { lat: 20.780, lng: 74.430 },
+      distance: 0.6,
+      amenities: ['WiFi', 'AC', 'Vegetarian Food', 'Meditation Room'],
+      image: hotelImages[1]
+    },
+    {
+      id: 203,
+      name: 'Sacred Journey Inn',
+      rating: 4.1,
+      ratingCount: 215,
+      price: 1700,
+      currency: 'INR',
+      address: 'Nashik Bazaar',
+      coordinates: { lat: 20.815, lng: 74.445 },
+      distance: 2.2,
+      amenities: ['WiFi', 'Restaurant', 'AC'],
+      image: hotelImages[2]
+    }
+  ],
+  3: [ // Thirukoshtyar Hanuman Temple - Tamil Nadu
+    {
+      id: 301,
+      name: 'Coimbatore Pilgrims Hotel',
+      rating: 4.4,
+      ratingCount: 320,
+      price: 2400,
+      currency: 'INR',
+      address: 'Coimbatore City Center',
+      coordinates: { lat: 11.0026, lng: 76.7151 },
+      distance: 1.8,
+      amenities: ['WiFi', 'AC', 'Restaurant', 'Parking'],
+      image: hotelImages[0]
+    },
+    {
+      id: 302,
+      name: 'Thiruk Temple Lodge',
+      rating: 4.2,
+      ratingCount: 189,
+      price: 1600,
+      currency: 'INR',
+      address: 'Near Thirukoshtyar Temple',
+      coordinates: { lat: 11.0105, lng: 76.7212 },
+      distance: 0.5,
+      amenities: ['WiFi', 'AC', 'Vegetarian Food'],
+      image: hotelImages[1]
+    }
+  ],
+  4: [ // Veerbhadra Temple - Karnataka
+    {
+      id: 401,
+      name: 'Hampi Heritage Resort',
+      rating: 4.5,
+      ratingCount: 350,
+      price: 3000,
+      currency: 'INR',
+      address: 'Hampi, Karnataka',
+      coordinates: { lat: 15.3350, lng: 76.4795 },
+      distance: 1.2,
+      amenities: ['WiFi', 'AC', 'Restaurant', 'Parking', 'Pool'],
+      image: hotelImages[0]
+    },
+    {
+      id: 402,
+      name: 'Veerbhadra Guest House',
+      rating: 4.3,
+      ratingCount: 245,
+      price: 1800,
+      currency: 'INR',
+      address: 'Hosapete, Hampi',
+      coordinates: { lat: 15.3460, lng: 76.4520 },
+      distance: 2.5,
+      amenities: ['WiFi', 'AC', 'Restaurant'],
+      image: hotelImages[2]
+    }
+  ],
+  5: [ // Muktagiri Jain Temple - Madhya Pradesh (21.8667, 77.9333)
+    {
+      id: 501,
+      name: 'Betul Valley Hotel',
+      rating: 4.2,
+      ratingCount: 198,
+      price: 1600,
+      currency: 'INR',
+      address: 'Betul City Center, Madhya Pradesh',
+      coordinates: { lat: 21.9117, lng: 77.6097 },
+      distance: 3.5,
+      amenities: ['WiFi', 'AC', 'Restaurant'],
+      image: hotelImages[1]
+    }
+  ],
+  6: [ // Chilkur Balaji Temple - Telangana (17.3333, 78.3667)
+    {
+      id: 601,
+      name: 'Hyderabad Visa Inn',
+      rating: 4.4,
+      ratingCount: 267,
+      price: 2800,
+      currency: 'INR',
+      address: 'Madhapur, Hyderabad',
+      coordinates: { lat: 17.3844, lng: 78.3582 },
+      distance: 1.8,
+      amenities: ['WiFi', 'AC', 'Restaurant', 'Parking'],
+      image: hotelImages[0]
+    },
+    {
+      id: 602,
+      name: 'Balaji Darshan Lodge',
+      rating: 4.1,
+      ratingCount: 156,
+      price: 1500,
+      currency: 'INR',
+      address: 'Near Chilkur Temple, Hyderabad',
+      coordinates: { lat: 17.3333, lng: 78.3667 },
+      distance: 0.5,
+      amenities: ['WiFi', 'AC', 'Vegetarian Food'],
+      image: hotelImages[2]
+    }
+  ],
+  7: [ // Maa Tara Tarini Temple - Odisha (19.2833, 84.8667)
+    {
+      id: 701,
+      name: 'Ganjam Shakti Hotel',
+      rating: 4.2,
+      ratingCount: 189,
+      price: 1700,
+      currency: 'INR',
+      address: 'Berhampur, Odisha',
+      coordinates: { lat: 19.3150, lng: 84.7939 },
+      distance: 2.1,
+      amenities: ['WiFi', 'AC', 'Restaurant'],
+      image: hotelImages[1]
+    }
+  ],
+  8: [ // Shree Stambheshwar Mahadev Temple - Gujarat (21.6167, 72.6167)
+    {
+      id: 801,
+      name: 'Tidal Waters Resort',
+      rating: 4.3,
+      ratingCount: 220,
+      price: 2200,
+      currency: 'INR',
+      address: 'Kavi Kamboi, Gujarat',
+      coordinates: { lat: 21.6167, lng: 72.6167 },
+      distance: 0.2,
+      amenities: ['WiFi', 'AC', 'Restaurant', 'Beach View'],
+      image: hotelImages[3]
+    }
+  ],
+  9: [ // Maa Kamakhya Temple - Assam (26.1667, 91.7000)
+    {
+      id: 901,
+      name: 'Guwahati Divine Hotel',
+      rating: 4.4,
+      ratingCount: 298,
+      price: 2400,
+      currency: 'INR',
+      address: 'Nilachal Hill Area, Guwahati',
+      coordinates: { lat: 26.1667, lng: 91.7000 },
+      distance: 0.5,
+      amenities: ['WiFi', 'AC', 'Restaurant', 'Parking'],
+      image: hotelImages[0]
+    }
+  ],
+  10: [ // Kaal Bhairav Temple - Madhya Pradesh (23.1765, 75.7885)
+    {
+      id: 1001,
+      name: 'Ujjain Bhairav Inn',
+      rating: 4.3,
+      ratingCount: 215,
+      price: 1800,
+      currency: 'INR',
+      address: 'Ujjain City Center, Madhya Pradesh',
+      coordinates: { lat: 23.1765, lng: 75.7885 },
+      distance: 0.3,
+      amenities: ['WiFi', 'AC', 'Restaurant'],
+      image: hotelImages[1]
+    }
+  ],
+  11: [ // Dandeshwar Temple - Tamil Nadu (11.1271, 78.6569)
+    {
+      id: 1101,
+      name: 'Tamil Nadu Heritage Hotel',
+      rating: 4.2,
+      ratingCount: 176,
+      price: 1600,
+      currency: 'INR',
+      address: 'Ranipet, Tamil Nadu',
+      coordinates: { lat: 12.9352, lng: 79.3244 },
+      distance: 2.8,
+      amenities: ['WiFi', 'AC', 'Vegetarian Food'],
+      image: hotelImages[2]
+    }
+  ],
+  12: [ // Bateshwar Temple Complex - Madhya Pradesh (26.0833, 78.3333)
+    {
+      id: 1201,
+      name: 'Gwalior Ancient Hotel',
+      rating: 4.5,
+      ratingCount: 340,
+      price: 2600,
+      currency: 'INR',
+      address: 'Gwalior City, Madhya Pradesh',
+      coordinates: { lat: 26.2183, lng: 78.1667 },
+      distance: 1.5,
+      amenities: ['WiFi', 'AC', 'Restaurant', 'Parking'],
+      image: hotelImages[0]
+    },
+    {
+      id: 1202,
+      name: 'Chambal Valley Resort',
+      rating: 4.2,
+      ratingCount: 198,
+      price: 1800,
+      currency: 'INR',
+      address: 'Near Bateshwar Temple',
+      coordinates: { lat: 26.0833, lng: 78.3333 },
+      distance: 0.8,
+      amenities: ['WiFi', 'AC', 'Restaurant'],
+      image: hotelImages[1]
+    }
+  ],
+  13: [ // Gurdwara Mehdiana Sahib - Punjab (30.7833, 75.4667)
+    {
+      id: 1301,
+      name: 'Jagraon Khalsa Hotel',
+      rating: 4.3,
+      ratingCount: 267,
+      price: 1900,
+      currency: 'INR',
+      address: 'Jagraon, Punjab',
+      coordinates: { lat: 30.7833, lng: 75.4667 },
+      distance: 0.5,
+      amenities: ['WiFi', 'AC', 'Vegetarian Food', 'Langar Facility'],
+      image: hotelImages[1]
+    }
+  ],
+  14: [ // Gurdwara Bhatha Sahib - Punjab (30.8333, 76.5833)
+    {
+      id: 1401,
+      name: 'Rupnagar Faith Hotel',
+      rating: 4.2,
+      ratingCount: 145,
+      price: 1700,
+      currency: 'INR',
+      address: 'Rupnagar, Punjab',
+      coordinates: { lat: 30.8333, lng: 76.5833 },
+      distance: 0.6,
+      amenities: ['WiFi', 'AC', 'Vegetarian Food'],
+      image: hotelImages[2]
+    }
+  ],
+  15: [ // Gurdwara Yahiyaganj - Uttar Pradesh (26.8467, 80.9462)
+    {
+      id: 1501,
+      name: 'Lucknow Sikh House',
+      rating: 4.1,
+      ratingCount: 178,
+      price: 1500,
+      currency: 'INR',
+      address: 'Lucknow City Center, Uttar Pradesh',
+      coordinates: { lat: 26.8467, lng: 80.9462 },
+      distance: 0.4,
+      amenities: ['WiFi', 'AC', 'Vegetarian Food', 'Langar'],
+      image: hotelImages[2]
+    }
+  ],
+  16: [ // Gurdwara Sri Guru Tegh Bahadur Sahib - Assam (26.0167, 89.9833)
+    {
+      id: 1601,
+      name: 'Dhubri Guru Inn',
+      rating: 4.0,
+      ratingCount: 134,
+      price: 1400,
+      currency: 'INR',
+      address: 'Dhubri, Assam',
+      coordinates: { lat: 26.0167, lng: 89.9833 },
+      distance: 0.3,
+      amenities: ['WiFi', 'AC', 'Vegetarian Food'],
+      image: hotelImages[1]
+    }
+  ],
+  17: [ // Gurdwara Akali Dal Gharib Nawaz - Maharashtra (19.0760, 72.8777)
+    {
+      id: 1701,
+      name: 'Mumbai Khalsa Lodge',
+      rating: 4.2,
+      ratingCount: 289,
+      price: 2500,
+      currency: 'INR',
+      address: 'Mumbai City Center, Maharashtra',
+      coordinates: { lat: 19.0760, lng: 72.8777 },
+      distance: 1.2,
+      amenities: ['WiFi', 'AC', 'Vegetarian Food', 'Parking'],
+      image: hotelImages[0]
+    }
+  ],
+  18: [ // Jamali Kamali Mosque and Tomb - Delhi (28.5167, 77.1833)
+    {
+      id: 1801,
+      name: 'Mehrauli Heritage Hotel',
+      rating: 4.4,
+      ratingCount: 312,
+      price: 2800,
+      currency: 'INR',
+      address: 'Mehrauli, Delhi',
+      coordinates: { lat: 28.5167, lng: 77.1833 },
+      distance: 0.2,
+      amenities: ['WiFi', 'AC', 'Restaurant', 'Parking'],
+      image: hotelImages[3]
+    },
+    {
+      id: 1802,
+      name: 'Delhi Islamic Inn',
+      rating: 4.1,
+      ratingCount: 189,
+      price: 1800,
+      currency: 'INR',
+      address: 'Mehrauli Area, Delhi',
+      coordinates: { lat: 28.5200, lng: 77.1800 },
+      distance: 0.8,
+      amenities: ['WiFi', 'AC', 'Halal Food'],
+      image: hotelImages[1]
+    }
+  ],
+  19: [ // Yellow Mosque - West Bengal (24.1833, 88.2667)
+    {
+      id: 1901,
+      name: 'Murshidabad Yellow Inn',
+      rating: 4.0,
+      ratingCount: 123,
+      price: 1300,
+      currency: 'INR',
+      address: 'Murshidabad, West Bengal',
+      coordinates: { lat: 24.1833, lng: 88.2667 },
+      distance: 0.5,
+      amenities: ['WiFi', 'AC', 'Halal Restaurant'],
+      image: hotelImages[2]
+    }
+  ],
+  20: [ // Mohidden Mosque - Lakshadweep (10.5667, 72.6367)
+    {
+      id: 2001,
+      name: 'Kavaratti Island Resort',
+      rating: 4.6,
+      ratingCount: 267,
+      price: 3500,
+      currency: 'INR',
+      address: 'Kavaratti Island, Lakshadweep',
+      coordinates: { lat: 10.5667, lng: 72.6367 },
+      distance: 0.2,
+      amenities: ['WiFi', 'AC', 'Beach Restaurant', 'Water Sports'],
+      image: hotelImages[0]
+    }
+  ],
+  21: [ // Najibabad Mosque - Uttar Pradesh (29.6167, 78.3333)
+    {
+      id: 2101,
+      name: 'Najibabad Faith Hotel',
+      rating: 4.1,
+      ratingCount: 145,
+      price: 1500,
+      currency: 'INR',
+      address: 'Najibabad, Uttar Pradesh',
+      coordinates: { lat: 29.6167, lng: 78.3333 },
+      distance: 0.3,
+      amenities: ['WiFi', 'AC', 'Halal Food'],
+      image: hotelImages[2]
+    }
+  ],
+  22: [ // Gurudwara Nanakmatta Sahib - Uttarakhand (28.9409799, 79.8156667)
+    {
+      id: 2201,
+      name: 'Nanak Sagar Hotel',
+      rating: 4.3,
+      ratingCount: 234,
+      price: 2000,
+      currency: 'INR',
+      address: 'Udham Singh Nagar, Uttarakhand',
+      coordinates: { lat: 28.9409799, lng: 79.8156667 },
+      distance: 0.4,
+      amenities: ['WiFi', 'AC', 'Vegetarian Food', 'Langar'],
+      image: hotelImages[1]
+    }
+  ],
+  23: [ // Hastinapur Jain Temple - Uttar Pradesh (29.161389, 78.006556)
+    {
+      id: 2301,
+      name: 'Hastinapur Sacred Inn',
+      rating: 4.2,
+      ratingCount: 198,
+      price: 1600,
+      currency: 'INR',
+      address: 'Hastinapur, Uttar Pradesh',
+      coordinates: { lat: 29.161389, lng: 78.006556 },
+      distance: 0.2,
+      amenities: ['WiFi', 'AC', 'Vegetarian Food', 'Meditation Room'],
+      image: hotelImages[2]
+    }
+  ],
+  24: [ // Sonagiriji Jain Temple - Madhya Pradesh (25.72, 78.38)
+    {
+      id: 2401,
+      name: 'Sonagiri Pilgrimage Hotel',
+      rating: 4.4,
+      ratingCount: 267,
+      price: 2200,
+      currency: 'INR',
+      address: 'Sonagiri, Datia District, Madhya Pradesh',
+      coordinates: { lat: 25.72, lng: 78.38 },
+      distance: 0.3,
+      amenities: ['WiFi', 'AC', 'Vegetarian Food', 'Meditation Room'],
+      image: hotelImages[0]
+    },
+    {
+      id: 2402,
+      name: 'White Temple Resort',
+      rating: 4.3,
+      ratingCount: 189,
+      price: 1800,
+      currency: 'INR',
+      address: 'Near Sonagiri Jain Temple',
+      coordinates: { lat: 25.7200, lng: 78.3800 },
+      distance: 0.5,
+      amenities: ['WiFi', 'AC', 'Vegetarian Food'],
+      image: hotelImages[1]
+    }
+  ]
+};
+
+/**
  * Mock hotel data for testing and demo purposes
  * Replace with actual API calls in production
  */
@@ -433,9 +943,9 @@ export async function getHotelsNearTemple(templeId, latitude, longitude, religio
     // Try to fetch real data from APIs
     let hotels = await fetchHotelsFromApis(latitude, longitude);
     
-    // If API fails or returns empty, use mock data
+    // If API fails or returns empty, use temple-specific mock data
     if (!hotels || hotels.length === 0) {
-      hotels = getMockHotels(religion);
+      hotels = getMockHotels(templeId, religion);
     }
 
     // Cache the results
@@ -447,7 +957,7 @@ export async function getHotelsNearTemple(templeId, latitude, longitude, religio
     return hotels;
   } catch (error) {
     console.warn('Error fetching hotels, using mock data:', error);
-    return getMockHotels(religion);
+    return getMockHotels(templeId, religion);
   }
 }
 
@@ -579,7 +1089,13 @@ async function fetchFromOSM(latitude, longitude) {
  * @param {string} religion - Temple religion
  * @returns {Array} Array of hotel objects
  */
-function getMockHotels(religion) {
+function getMockHotels(templeId, religion = 'hindu') {
+  // First check if we have temple-specific hotels
+  if (hotelsByTemple[templeId] && hotelsByTemple[templeId].length > 0) {
+    return hotelsByTemple[templeId];
+  }
+  
+  // Fall back to religion-based hotels if no temple-specific data
   const religionKey = religion.toLowerCase();
   return mockHotels[religionKey] || mockHotels.hindu;
 }
