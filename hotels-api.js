@@ -1000,23 +1000,42 @@ async function fetchHotelsFromApis(latitude, longitude) {
  */
 async function fetchFromOverpassAPI(latitude, longitude) {
   const radius = HOTEL_SEARCH_RADIUS * 1000; // Convert km to meters
-  const query = `
-    [out:json];
-    (
-      node["tourism"="hotel"](${latitude - 0.05},${longitude - 0.05},${latitude + 0.05},${longitude + 0.05});
-      node["tourism"="guest_house"](${latitude - 0.05},${longitude - 0.05},${latitude + 0.05},${longitude + 0.05});
-      node["tourism"="hostel"](${latitude - 0.05},${longitude - 0.05},${latitude + 0.05},${longitude + 0.05});
-    );
-    out center;
-  `;
+  // Reasonable bounding box with timeout - format: (south,west,north,east)
+  const south = latitude - 0.045;
+  const west = longitude - 0.045;
+  const north = latitude + 0.045;
+  const east = longitude + 0.045;
+  
+  const query = `[out:json][timeout:30];(node["tourism"="hotel"](${south},${west},${north},${east});node["tourism"="guest_house"](${south},${west},${north},${east});node["tourism"="hostel"](${south},${west},${north},${east}););out center;`;
 
-  const response = await fetch('https://overpass-api.de/api/interpreter', {
-    method: 'POST',
-    body: `data=${encodeURIComponent(query)}`,
-  });
+  // Fallback servers in case primary fails
+  const servers = [
+    'https://overpass-api.de/api/interpreter',
+    'https://overpass.kumi.systems/api/interpreter',
+    'https://maps.mail.ru/osm/tools/overpass/api/interpreter'
+  ];
 
-  if (!response.ok) {
-    throw new Error('Overpass API request failed');
+  let response;
+  let lastError;
+
+  for (const server of servers) {
+    try {
+      response = await fetch(server, {
+        method: 'POST',
+        body: `data=${encodeURIComponent(query)}`,
+      });
+
+      if (response.ok) {
+        break; // Success, exit loop
+      }
+    } catch (error) {
+      lastError = error;
+      continue; // Try next server
+    }
+  }
+
+  if (!response || !response.ok) {
+    throw new Error(`Overpass API request failed: ${lastError?.message || 'No response'}`);
   }
 
   const data = await response.json();
@@ -1046,22 +1065,42 @@ async function fetchFromOverpassAPI(latitude, longitude) {
  * @returns {Promise<Array>} Array of hotel objects
  */
 async function fetchFromOSM(latitude, longitude) {
-  const query = `
-    [bbox=${longitude - 0.05},${latitude - 0.05},${longitude + 0.05},${latitude + 0.05}];
-    (
-      node["tourism"="hotel"];
-      way["tourism"="hotel"];
-    );
-    out geom;
-  `;
+  // Simplified query without bbox directive - it's redundant with node filters
+  const south = latitude - 0.04;
+  const west = longitude - 0.04;
+  const north = latitude + 0.04;
+  const east = longitude + 0.04;
+  
+  const query = `[out:json][timeout:30];(node["tourism"="hotel"](${south},${west},${north},${east});way["tourism"="hotel"](${south},${west},${north},${east}););out geom;`;
 
-  const response = await fetch('https://overpass-api.de/api/interpreter', {
-    method: 'POST',
-    body: `data=${encodeURIComponent(query)}`,
-  });
+  // Fallback servers in case primary fails
+  const servers = [
+    'https://overpass-api.de/api/interpreter',
+    'https://overpass.kumi.systems/api/interpreter',
+    'https://maps.mail.ru/osm/tools/overpass/api/interpreter'
+  ];
 
-  if (!response.ok) {
-    throw new Error('OSM API request failed');
+  let response;
+  let lastError;
+
+  for (const server of servers) {
+    try {
+      response = await fetch(server, {
+        method: 'POST',
+        body: `data=${encodeURIComponent(query)}`,
+      });
+
+      if (response.ok) {
+        break; // Success, exit loop
+      }
+    } catch (error) {
+      lastError = error;
+      continue; // Try next server
+    }
+  }
+
+  if (!response || !response.ok) {
+    throw new Error(`OSM API request failed: ${lastError?.message || 'No response'}`);
   }
 
   const data = await response.json();
