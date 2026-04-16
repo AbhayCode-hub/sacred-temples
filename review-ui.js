@@ -68,6 +68,7 @@ function createReviewForm(templeId) {
           required 
           minlength="2"
           maxlength="50"
+          autocomplete="name"
         >
       </div>
 
@@ -79,6 +80,7 @@ function createReviewForm(templeId) {
           name="email" 
           placeholder="your.email@example.com" 
           required
+          autocomplete="email"
         >
         <small class="help-text">For verification only, never shared publicly</small>
       </div>
@@ -112,6 +114,7 @@ function createReviewForm(templeId) {
           minlength="10"
           maxlength="5000"
           rows="5"
+          autocomplete="off"
         ></textarea>
         <small class="help-text"><span id="charCount">0</span>/5000 characters</small>
       </div>

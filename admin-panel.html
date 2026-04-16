@@ -487,12 +487,14 @@
         async function ensureParentDocExist() {
             try {
                 const parentRef = doc(db, 'temples', '1');
-                const snapshot = await getDocs(query(collection(db, 'temples')));
-                if (snapshot.empty) {
-                    // No temple docs exist, create the parent
-                    await setDoc(parentRef, { initialized: true, createdAt: new Date().toISOString() });
-                    console.log('✅ Created parent document temples/1');
-                }
+                // Always ensure temples/1 has data so it appears in queries
+                await setDoc(parentRef, { 
+                    name: 'Temples Collection',
+                    initialized: true, 
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                }, { merge: true }); // merge: true so it doesn't overwrite existing data
+                console.log('✅ Parent document temples/1 ensured to exist');
             } catch (error) {
                 console.error('⚠️ Error ensuring parent doc:', error);
             }
@@ -502,25 +504,32 @@
         async function fetchPendingReviews() {
             try {
                 const temples = await getDocs(collection(db, 'temples'));
+                console.log(`📦 Found ${temples.docs.length} temple documents`);
                 const pendingReviews = [];
 
                 for (const templeDoc of temples.docs) {
                     const templeId = templeDoc.id;
+                    console.log(`🏛️ Checking temple: ${templeId} (${templeDoc.data().name || 'Unknown'})`);
+                    
                     const reviewsCollection = collection(db, `temples/${templeId}/reviews`);
                     const q = query(reviewsCollection, where('status', '==', 'pending'));
                     const snapshot = await getDocs(q);
+                    
+                    console.log(`  └─ Found ${snapshot.docs.length} pending reviews`);
 
                     snapshot.forEach(doc => {
+                        const reviewData = doc.data();
                         pendingReviews.push({
                             id: doc.id,
                             templeId: templeId,
                             templeName: templeDoc.data().name || 'Unknown Temple',
-                            ...doc.data(),
-                            timestamp: doc.data().timestamp?.toDate?.() || new Date(doc.data().createdAt)
+                            ...reviewData,
+                            timestamp: reviewData.timestamp?.toDate?.() || new Date(reviewData.createdAt)
                         });
                     });
                 }
 
+                console.log(`✅ Total pending reviews found: ${pendingReviews.length}`);
                 return pendingReviews.sort((a, b) => {
                     const dateA = new Date(a.timestamp || a.createdAt);
                     const dateB = new Date(b.timestamp || b.createdAt);
@@ -528,6 +537,7 @@
                 });
             } catch (error) {
                 console.error('❌ Error fetching pending reviews:', error);
+                console.error('Error details:', error.message);
                 return [];
             }
         }
