@@ -9,6 +9,12 @@ import {
     updateDoc,
     doc
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBtToGx-c7ELLhXXBg_F9K0YGKLsc-JObE",
@@ -22,9 +28,11 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 let currentFilter = 'pending';
 let allReviews = [];
+let isAuthenticated = false;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // FIX 1: Use collectionGroup('reviews') instead of iterating temple documents.
@@ -244,6 +252,10 @@ window.loadReviews = async function (filter) {
 };
 
 window.handleApprove = async function (templeId, reviewId) {
+    if (!isAuthenticated) {
+        showToast('Please log in to approve reviews', 'error');
+        return;
+    }
     const result = await updateReviewStatus(templeId, reviewId, 'approved');
     if (result.success) {
         showToast('Review approved ✓', 'success');
@@ -255,6 +267,10 @@ window.handleApprove = async function (templeId, reviewId) {
 };
 
 window.handleReject = async function (templeId, reviewId) {
+    if (!isAuthenticated) {
+        showToast('Please log in to reject reviews', 'error');
+        return;
+    }
     const result = await updateReviewStatus(templeId, reviewId, 'rejected');
     if (result.success) {
         showToast('Review rejected', 'warning');
@@ -283,9 +299,101 @@ window.closeImageModal = function () {
     document.getElementById('imageModal').classList.remove('active');
 };
 
-window.addEventListener('DOMContentLoaded', async () => {
-    await updateStats();
+// ─────────────────────────────────────────────────────────────────────────────
+// AUTHENTICATION
+// ─────────────────────────────────────────────────────────────────────────────
+window.handleLogin = async function () {
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+
+    if (!email || !password) {
+        showToast('Please enter email and password', 'error');
+        return;
+    }
+
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
+        showToast('Logged in successfully!', 'success');
+        // Auth state change listener will handle the rest
+    } catch (error) {
+        console.error('Login error:', error);
+        if (error.code === 'auth/user-not-found') {
+            showToast('User not found', 'error');
+        } else if (error.code === 'auth/wrong-password') {
+            showToast('Wrong password', 'error');
+        } else if (error.code === 'auth/invalid-email') {
+            showToast('Invalid email format', 'error');
+        } else {
+            showToast('Login failed: ' + error.message, 'error');
+        }
+    }
+};
+
+window.handleLogout = async function () {
+    try {
+        await signOut(auth);
+        isAuthenticated = false;
+        showToast('Logged out', 'success');
+        showLoginScreen();
+    } catch (error) {
+        showToast('Logout failed', 'error');
+    }
+};
+
+function showLoginScreen() {
+    const content = document.getElementById('reviewsContent');
+    content.innerHTML = `
+        <div style="display: flex; align-items: center; justify-content: center; min-height: 400px;">
+            <div style="background: #f9f9f9; padding: 40px; border-radius: 8px; text-align: center; max-width: 300px;">
+                <h2 style="color: #333; margin-bottom: 20px;">Admin Login</h2>
+                <input
+                    id="loginEmail"
+                    type="email"
+                    placeholder="Email"
+                    style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;"
+                />
+                <input
+                    id="loginPassword"
+                    type="password"
+                    placeholder="Password"
+                    style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;"
+                />
+                <button
+                    onclick="handleLogin()"
+                    style="width: 100%; padding: 10px; background: #667eea; color: white; border: none; border-radius: 5px; font-weight: 600; cursor: pointer; font-size: 14px;"
+                >
+                    Login
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+function showAdminPanel() {
+    // Reload the panel content
+    updateStats();
     loadReviews('pending');
+}
+
+window.addEventListener('DOMContentLoaded', async () => {
+    // Check authentication state
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // User is authenticated
+            isAuthenticated = true;
+            showAdminPanel();
+            
+            // Show logout button in header if available
+            const headerLogout = document.querySelector('[data-logout-btn]');
+            if (headerLogout) {
+                headerLogout.style.display = 'block';
+            }
+        } else {
+            // User is not authenticated
+            isAuthenticated = false;
+            showLoginScreen();
+        }
+    });
 
     document.querySelectorAll('.filter-tab').forEach(btn => {
         btn.addEventListener('click', () => loadReviews(btn.dataset.filter));
